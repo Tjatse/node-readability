@@ -1,7 +1,7 @@
 {
   "name": "read-art",
-  "version": "0.0.1",
-  "description": "Scrape article from any page, automatically.",
+  "version": "0.0.3",
+  "description": "Scrape article from any page, automatically, make web page readability.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R Spec -t 10000"
@@ -33,8 +33,5 @@
     "mocha": "^1.18.2",
     "chai": "^1.9.1"
   },
-  "readmeFilename": "README.md",
-  "_id": "read-art@0.0.1",
-  "_from": "read-art@*",
-  "_resolved": "http://registry.cnpmjs.org/read-art/download/read-art-0.0.1.tgz"
+  "readmeFilename": "README.md"
 }
