@@ -1,5 +1,6 @@
 # read-art -- readability reference to Arc90's
 Scrape article from any page, automatically. make any web page readability, no matter Chinese or English,very useful for ElasticSearch data spider.
+
 快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。
 
 ## Installation
@@ -9,7 +10,8 @@ Scrape article from any page, automatically. make any web page readability, no m
 see test or examples folder for a complete example
 
 ## Read Article
-```read(html|uri [, options], callback)```
+`read(html|uri [, options], callback)`
+
 read-art is designed to be the simplest way possible to make web-article scrape, it supports the definitions such as:
 
 Where
@@ -41,23 +43,27 @@ read({ uri: 'http://google.com', overrideCharset: 'utf8' }, function(err, art, o
 what about simple html?
 
 ```javascript
-read('<div><p>hello, node-read!</p></div>', { overrideCharset: 'utf8' }, function(err, art, options){
+read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', { overrideCharset: 'utf8' }, function(err, art, options){
   ...
 });
+```
 
 or
 ```javascript
-read({ uri: '<div><p>hello, node-read!</p></div>', overrideCharset: 'utf8' }, function(err, art, options){
+read({ uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', overrideCharset: 'utf8' }, function(err, art, options){
   ...
 });
 
 ```
+
 or
 ```javascript
-read({ html: '<div><p>hello, node-read!</p></div>', overrideCharset: 'utf8' }, function(err, art, options){
+read({ html: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', overrideCharset: 'utf8' }, function(err, art, options){
   ...
 });
 ```
+
+**CAUTION** title must be wrapped in a *title* tag and content must be wrapped in a *body* tag.
 
 ## Options
 ### cacheable
@@ -66,19 +72,19 @@ A value indicating whether cache body && title.
 ### killBreaks
 Kill breaks in the HTML, and convert them to simple `<br />`.
 
-options from [cheerio](https://github.com/cheeriojs/cheerio)
+###options from [cheerio](https://github.com/cheeriojs/cheerio)
 ### xmlMode
 Indicates whether special tags (`<script>` and `<style>`) should get special treatment and if "empty" tags (eg. `<br>`) can have children. If false, the content of special tags will be text only.
 
 For feeds and other XML content (documents that don't consist of HTML), set this to true. Default: false.
 
-## lowerCaseTags
+### lowerCaseTags
 If set to true, all tags will be lowercased. If xmlMode is disabled, this defaults to true.
 
-## normalizeWhitespace
+### normalizeWhitespace
 Returns the innerHTML with the leading, trailing, and repeating white spaces stripped.
 
-options from [fetch](https://github.com/andris9/fetch)
+### options from [fetch](https://github.com/andris9/fetch)
 [Click Here To Redirect](https://github.com/andris9/fetch#options)
 
 ## Features
@@ -102,6 +108,7 @@ to refrain from the crazy messy codes.
 
 ## Test
 cd to the read-art directory and install all the dependencies library.
+
 `./node_modules/.bin/mocha -R Spec -t 10000`
 
 ## Other Library
@@ -129,7 +136,6 @@ bndr/node-read is amazing, and i've worked on this for a while, but it's hard to
 
 ## License
 Copyright 2014 Tjatse
-https://github.com/Tjatse/read-art
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
