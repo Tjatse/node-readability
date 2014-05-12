@@ -24,10 +24,7 @@ module.exports = read;
 /**
  * Read article from page.
  * @param uri uri or html
- * @param options including:
- *  cacheable: false as default.
- *  killBreaks: true as default.
- *  lowerCaseTags: true as default.
+ * @param options reference to https://github.com/Tjatse/node-readability#options
  * @param callback callback, have two arguments been passed:
  * 1: error
  * 2: article
@@ -45,8 +42,9 @@ function read(uri, options, callback){
     options = uri;
     uri = options.uri || options.html;
   }
-  defineBoolean(options, 'killBreaks', true);
-  defineBoolean(options, 'lowerCaseTags', true);
+  defineOption(options, 'killBreaks', true);
+  defineOption(options, 'lowerCaseTags', true);
+  defineOption(options, 'dataType', 'html');
 
   // indicating uri is html or url.
   var isHTML = uri.match(/^\s*</);
@@ -90,7 +88,7 @@ function parse(o) {
   if(o.options.killBreaks){
     // replace <br />(blanks goes here) to <br />.
     o.html = o.html.replace(/(<br\s*\/?>(\s|&nbsp;?)*){1,}/g,'<br />');
-    // remove formats like \r\t\n
+    // remove tab symbols like \r\t\n
     o.html = o.html.replace(/([\n\r\t]*){2,}/gi, '');
   }
 
@@ -103,12 +101,12 @@ function parse(o) {
 }
 
 /**
- * Define property of object to default boolean value.
+ * Define property of object to default value.
  * @param options option object
  * @param k key
  * @param v value
  */
-function defineBoolean(options, k, v){
+function defineOption(options, k, v){
   if(typeof options[k] == 'undefined'){
     options[k] = v;
   }
