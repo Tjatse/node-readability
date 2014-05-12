@@ -91,7 +91,7 @@ function parse(o) {
     // replace <br />(blanks goes here) to <br />.
     o.html = o.html.replace(/(<br\s*\/?>(\s|&nbsp;?)*){1,}/g,'<br />');
     // remove formats like \r\t\n
-    o.html = o.html.replace(/[\r\t\n]/g, '');
+    o.html = o.html.replace(/([\n\r\t]*){2,}/gi, '');
   }
 
   var co = {};
