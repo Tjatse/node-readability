@@ -66,11 +66,14 @@ read({ html: '<title>node-art</title><body><div><p>hello, read-art!</p></div></b
 **CAUTION** title must be wrapped in a *title* tag and content must be wrapped in a *body* tag.
 
 ## Options
+### dataType
+The data type of article content, including: html, text.
+
 ### cacheable
 A value indicating whether cache body && title.
 
 ### killBreaks
-Kill breaks in the HTML, and convert them to simple `<br />`.
+Kill breaks, blanks, tab symbols(\r\t\n) into one <br />.
 
 ###options from [cheerio](https://github.com/cheeriojs/cheerio)
 ### xmlMode
