@@ -1,6 +1,6 @@
 {
   "name": "read-art",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Scrape article from any page, automatically, make web page readability.",
   "main": "index.js",
   "scripts": {
