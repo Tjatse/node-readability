@@ -1,4 +1,5 @@
-# read-art -- readability reference to Arc90's
+# read-art
+readability reference to Arc90's
 Scrape article from any page, automatically. make any web page readability, no matter Chinese or English,very useful for ElasticSearch data spider.
 
 快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。
@@ -130,7 +131,7 @@ and otherwise, JSDOM is a memory killer.
 bndr/node-read is amazing, and i've worked on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. so i decided to write it on my own.
 
 ## TODO
-- get video, img tags
+- ~~get video, img tags~~
 - get published time
 - get author
 - get source
