@@ -1,11 +1,8 @@
 # read-art
-- Readability reference to Arc90's.
-
-- Scrape article from any page, automatically.
-
-- Make any web page readability, no matter Chinese or English,very useful for ElasticSearch data spider.
-
-**快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。**
+1. Readability reference to Arc90's.
+2. Scrape article from any page, automatically.
+3. Make any web page readability, no matter Chinese or English,very useful for ElasticSearch data spider.
+> *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
 ## Installation
 `npm install read-art`
