@@ -6,13 +6,17 @@
 > *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
 ## Installation
-```npm install read-art```
+```javascript
+npm install read-art
+```
 
 ## Usage
 see test or examples folder for a complete example
 
 ## Read Article
-```read(html/uri [, options], callback)```
+```javascript
+read(html/uri [, options], callback)
+```
 
 read-art is designed to be the simplest way possible to make web-article scrape, it supports the definitions such as:
 
@@ -69,7 +73,7 @@ read({ html: '<title>node-art</title><body><div><p>hello, read-art!</p></div></b
 
 ## Options
 ### dataType
-The data type of article content, including: html, text. see more @[output](#Output)
+The data type of article content, including: html, text. see more @[Output](#output)
 
 ### cacheable
 A value indicating whether cache body && title.
@@ -164,9 +168,8 @@ read('http://example.com', {
 the art.content will be an Array
 ```json
 [
-  { type: 'img', value: 'http://example.com/jpg/site1/20140519/00188b1996f214e3a25417.jpg' },
-  { type: 'text', value: 'TEXT goes here...' },
-  ...
+  { "type": "img", "value": "http://example.com/jpg/site1/20140519/00188b1996f214e3a25417.jpg" },
+  { "type": "text", "value": "TEXT goes here..." }
 ]
 ```
 there only two type were supported now: *img* and *text*
@@ -199,7 +202,9 @@ to refrain from the crazy messy codes.
 ## Test
 cd to the read-art directory and install all the dependencies library.
 
-```./node_modules/.bin/mocha -R Spec -t 10000```
+```javascript
+./node_modules/.bin/mocha -R Spec -t 10000
+```
 
 ## Other Library
 ### [luin/node-readability](https://github.com/luin/node-readability)
