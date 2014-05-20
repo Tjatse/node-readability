@@ -6,18 +6,18 @@
 > *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
 ## Installation
-`npm install read-art`
+```npm install read-art```
 
 ## Usage
 see test or examples folder for a complete example
 
 ## Read Article
-`read(html|uri [, options], callback)`
+```read(html/uri [, options], callback)```
 
 read-art is designed to be the simplest way possible to make web-article scrape, it supports the definitions such as:
 
 Where
-  * **html|uri** html or uri string.
+  * **html/uri** html or uri string.
   * **options** is an optional options object
   * **callback** is the callback to run - `callback(error, article, options)`
 
@@ -69,7 +69,7 @@ read({ html: '<title>node-art</title><body><div><p>hello, read-art!</p></div></b
 
 ## Options
 ### dataType
-The data type of article content, including: html, text.
+The data type of article content, including: html, text. see more @[output](#Output)
 
 ### cacheable
 A value indicating whether cache body && title.
@@ -91,6 +91,91 @@ Returns the innerHTML with the leading, trailing, and repeating white spaces str
 
 ### options from [fetch](https://github.com/andris9/fetch)
 [Click Here To Redirect](https://github.com/andris9/fetch#options)
+
+## Output
+You can set different dataType to wrap the output
+### text
+Returns the inner text of article content.
+
+Example
+```javascript
+read('http://example.com', {
+  dataType: 'text'
+}, function(err, art){
+  // art.content will be formatted as TEXT
+});
+```
+and the full usage
+```javascript
+read('http://example.com', {
+  dataType: {
+    type: 'text',
+    stripSpaces: true
+  }
+}, function(err, art){
+  // art.content will be formatted as TEXT
+});
+```
+
+### html
+Returns the inner HTML of article content.
+
+Example
+```javascript
+read('http://example.com', {
+  dataType: 'html'
+}, function(err, art){
+  // art.content will be formatted as HTML
+});
+```
+and the full usage
+```javascript
+read('http://example.com', {
+  dataType: {
+    type: 'html',
+    stripSpaces: true
+  }
+}, function(err, art){
+  // art.content will be formatted as HTML
+});
+```
+
+### json
+Returns the restful result of article content.
+Example
+```javascript
+read('http://example.com', {
+  dataType: 'json'
+}, function(err, art){
+  // art.content will be formatted as JSON
+});
+```
+and the full usage
+```javascript
+read('http://example.com', {
+  dataType: {
+    type: 'json',
+    stripSpaces: true
+  }
+}, function(err, art){
+  // art.content will be formatted as JSON
+});
+```
+the art.content will be an Array
+```json
+[
+  { type: 'img', value: 'http://example.com/jpg/site1/20140519/00188b1996f214e3a25417.jpg' },
+  { type: 'text', value: 'TEXT goes here...' },
+  ...
+]
+```
+there only two type were supported now: *img* and *text*
+
+As you see, the dataType could be defined in two way:
+1. Simple String, should be one of *text*, *html* and *json*.
+2. Complex Object, including keys:
+  - type: one of *text*, *html* and *json*, default as 'html'.
+  - stripSpaces: a value indicating whether strip tab symbols(\r\t\n), default as false.
 
 ## Features
 __&#991; Blazingly fast:__
@@ -114,7 +199,7 @@ to refrain from the crazy messy codes.
 ## Test
 cd to the read-art directory and install all the dependencies library.
 
-`./node_modules/.bin/mocha -R Spec -t 10000`
+```./node_modules/.bin/mocha -R Spec -t 10000```
 
 ## Other Library
 ### [luin/node-readability](https://github.com/luin/node-readability)
