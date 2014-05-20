@@ -75,9 +75,6 @@ read({ html: '<title>node-art</title><body><div><p>hello, read-art!</p></div></b
 ### dataType
 The data type of article content, including: html, text. see more @[Output](#output)
 
-### cacheable
-A value indicating whether cache body && title.
-
 ### killBreaks
 Kill breaks, blanks, tab symbols(\r\t\n) into one <br />.
 
