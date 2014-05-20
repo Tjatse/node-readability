@@ -6,7 +6,7 @@ var read = require('../'),
 describe('output',function(){
 
   describe('dataType is text',function(){
-    it.skip('should have no tag',function(done){
+    it('should have no tag',function(done){
       read('<title>read-art</title><body><div><div><img src="test1.jpg" /><img src="test2.jpg" /></div><p>hi, dude, i am readability, aka read-art...</p></div></body>', {
         dataType: 'text'
       }, function(err, art){
@@ -19,7 +19,7 @@ describe('output',function(){
     });
   });
   describe('dataType is html',function(){
-    it.skip('should have tag',function(done){
+    it('should have tag',function(done){
       read('<title>read-art</title><body><div><div><img src="test1.jpg" /><img src="test2.jpg" /></div><p>hi, dude, i am readability, aka read-art...</p></div></body>', {
         dataType: 'html'
       }, function(err, art){
