@@ -1,5 +1,5 @@
 
-var read = require('../'),
+var read = require('.'),
   chai = require('chai'),
   expect = chai.expect,
   should = chai.should();
