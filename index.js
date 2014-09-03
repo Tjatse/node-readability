@@ -89,7 +89,7 @@ function parse(o) {
     // replace <br />(blanks goes here) to <br />.
     o.html = o.html.replace(/(<br\s*\/?>(\s|&nbsp;?)*){1,}/g,'<br />');
     // remove tab symbols like \r\t\n
-    o.html = o.html.replace(/([\n\r\t]*){2,}/gi, '');
+    o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ');
   }
 
   var co = {};
