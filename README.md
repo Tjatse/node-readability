@@ -221,12 +221,12 @@ and otherwise, JSDOM is a memory killer.
 bndr/node-read is amazing, and i've worked on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. so i decided to write it on my own.
 
 ## TODO
-- ~~get video, img tags~~
+- [x] get video, img tags
 - get published time
 - get author
 - get source
 - pagination
-- more tests
+- [x] more tests
 
 ## License
 Copyright 2014 Tjatse
