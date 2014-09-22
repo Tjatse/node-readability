@@ -1,5 +1,6 @@
 # read-art
-[![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fury.io/js/read-art) [![Coverage Status](https://coveralls.io/repos/Tjatse/node-readability/badge.png)](https://coveralls.io/r/Tjatse/node-readability)
+[![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fury.io/js/read-art)
+
 1. Readability reference to Arc90's.
 2. Scrape article from any page, automatically.
 3. Make any web page readability, no matter Chinese or English,very useful for ElasticSearch data spider.
