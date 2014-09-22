@@ -25,7 +25,7 @@ describe('different options',function(){
       read(uri, function(err, art, options){
         should.not.exist(err);
         options.uri.should.be.equal(uri);
-        options.overrideCharset.should.not.exist(charset);
+        should.not.exist(options.overrideCharset);
       });
     });
   });
