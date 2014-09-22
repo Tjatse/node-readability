@@ -202,7 +202,7 @@ to refrain from the crazy messy codes.
 cd to the read-art directory and install all the dependencies library.
 
 ```javascript
-./node_modules/.bin/mocha -R Spec -t 10000
+npm test
 ```
 
 ## Other Library
@@ -222,10 +222,10 @@ bndr/node-read is amazing, and i've worked on this for a while, but it's hard to
 
 ## TODO
 - [x] get video, img tags
-- get published time
-- get author
-- get source
-- pagination
+- [ ] get published time
+- [ ] get author
+- [ ] get source
+- [ ] pagination
 - [x] more tests
 
 ## License
