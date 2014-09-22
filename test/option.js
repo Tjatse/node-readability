@@ -11,23 +11,21 @@ var uri = 'http://github.com',
 describe('different options',function(){
 
   describe('have three arguments',function(){
-    it('should detect three options',function(){
+    it('should detect two options',function(){
       read(uri, { overrideCharset: charset }, function(err, art, options){
         should.not.exist(err);
         options.uri.should.be.equal(uri);
         options.overrideCharset.should.be.equal(charset);
-        options.callback.should.be.an('function');
       });
     });
   });
 
   describe('have two arguments(string, function)',function(){
-    it('should detect two options',function(){
+    it('should detect one options',function(){
       read(uri, function(err, art, options){
         should.not.exist(err);
         options.uri.should.be.equal(uri);
         options.overrideCharset.should.not.exist(charset);
-        options.callback.should.be.an('function');
       });
     });
   });
@@ -38,7 +36,6 @@ describe('different options',function(){
         should.not.exist(err);
         options.uri.should.be.equal(uri);
         options.overrideCharset.should.be.equal(charset);
-        options.callback.should.be.an('function');
       });
     });
   });
