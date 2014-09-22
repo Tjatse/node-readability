@@ -26,13 +26,13 @@
     "node >= 0.8.0"
   ],
   "dependencies": {
-    "cheerio": "*",
-    "fetch": "*",
-    "URIjs": "*"
+    "cheerio": "0.17.0",
+    "fetch": "0.3.6",
+    "URIjs": "1.14.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "chai": "*"
+    "mocha": "1.21.4",
+    "chai": "1.9.1"
   },
   "readmeFilename": "README.md"
 }
