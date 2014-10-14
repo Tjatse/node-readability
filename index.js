@@ -44,7 +44,7 @@ function read(uri, options, callback){
   }
   defineOption(options, 'killBreaks', true);
   defineOption(options, 'lowerCaseTags', true);
-  defineOption(options, 'dataType', 'html');
+  defineOption(options, 'output', 'html');
 
   // indicating uri is html or url.
   var isHTML = uri.match(/^\s*</);
