@@ -15,7 +15,7 @@
 
 "use strict";
 
-var fetchUrl = require('fetch').fetchUrl,
+var req = require('req-fast'),
   cheerio = require('cheerio'),
   Article = require('./lib/article');
 
@@ -60,15 +60,15 @@ function read(uri, options, callback){
   };
   // fetch body or straight convert to article.
   if (options.uri) {
-    fetchUrl(uri, options, function(err, meta, body) {
+    req(options, function(err, resp) {
       if (err) {
         return callback(err);
       }
-      if(meta.status != 200){
-        return callback(new Error('STATUS: ' + meta.status));
+      if(resp.statusCode != 200){
+        return callback(new Error('STATUS: ' + resp.statusCode));
       }
 
-      parsingData.html = body.toString();
+      parsingData.html = resp.body.toString();
       parse(parsingData);
     });
   }else{
