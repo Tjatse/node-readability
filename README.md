@@ -7,6 +7,8 @@
 
 > *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
+**NOTES: the property `dataType` was changed to `output`, sorry for that.**
+
 ## Features
 - Automatic Read Title & Body
 - Follow Redirects
