@@ -7,31 +7,40 @@
 
 > *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
+## Features
+- Automatic Read Title & Body
+- Follow Redirects
+- Automatic Decoding Content Encodings(Avoid Messy Codes, Especially Chinese)
+- Gzip/Deflate Encoding(Automatic Decompress)
+- Proxy
+
 ## Installation
 ```javascript
 npm install read-art
 ```
 
 ## Usage
-see test or examples folder for a complete example
-
-## Read Article
 ```javascript
 read(html/uri [, options], callback)
 ```
 
 read-art is designed to be the simplest way possible to make web-article scrape, it supports the definitions such as:
 
-Where
-  * **html/uri** html or uri string.
-  * **options** is an optional options object
-  * **callback** is the callback to run - `callback(error, article, options)`
+  * **html/uri** Html or Uri string.
+  * **options** An optional options object, including:
+    - **dataType** The data type of article content, including: html, text. see more @[Output](#output)
+    - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` as default.
+    - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
+    - **options from [req-fast](https://github.com/Tjatse/req-fast)**
+  * **callback** The callback to run - `callback(error, article, options)`
 
-Example
-scrape by uri?
+> See test or examples folder for a complete example
+
+Just try it
 ```javascript
 var read = require('read-art');
-read('http://google.com', { overrideCharset: 'utf8' }, function(err, art, options){
+// read from google could be
+read('http://google.com', { charset: 'utf8' }, function(err, art, options){
   if(err){
     throw err;
   }
@@ -39,68 +48,25 @@ read('http://google.com', { overrideCharset: 'utf8' }, function(err, art, option
       content = art.content,  // content of article
       html = art.html;        // whole original innerHTML
 });
-```
+// or
+read({ uri: 'http://google.com', charset: 'utf8' }, function(err, art, options){
 
-or
-```javascript
-read({ uri: 'http://google.com', overrideCharset: 'utf8' }, function(err, art, options){
-  ...
+});
+// what about html?
+read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', { charset: 'utf8' }, function(err, art, options){
+
+});
+// of course could be
+read({ uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', charset: 'utf8' }, function(err, art, options){
+
 });
 ```
-
-what about simple html?
-
-```javascript
-read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', { overrideCharset: 'utf8' }, function(err, art, options){
-  ...
-});
-```
-
-or
-```javascript
-read({ uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', overrideCharset: 'utf8' }, function(err, art, options){
-  ...
-});
-
-```
-
-or
-```javascript
-read({ html: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', overrideCharset: 'utf8' }, function(err, art, options){
-  ...
-});
-```
-
-**CAUTION** title must be wrapped in a *title* tag and content must be wrapped in a *body* tag.
-
-## Options
-### dataType
-The data type of article content, including: html, text. see more @[Output](#output)
-
-### killBreaks
-Kill breaks, blanks, tab symbols(\r\t\n) into one <br />.
-
-###options from [cheerio](https://github.com/cheeriojs/cheerio)
-### xmlMode
-Indicates whether special tags (`<script>` and `<style>`) should get special treatment and if "empty" tags (eg. `<br>`) can have children. If false, the content of special tags will be text only.
-
-For feeds and other XML content (documents that don't consist of HTML), set this to true. Default: false.
-
-### lowerCaseTags
-If set to true, all tags will be lowercased. If xmlMode is disabled, this defaults to true.
-
-### normalizeWhitespace
-Returns the innerHTML with the leading, trailing, and repeating white spaces stripped.
-
-### options from [fetch](https://github.com/andris9/fetch)
-[Click Here To Redirect](https://github.com/andris9/fetch#options)
+**CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
 ## Output
 You can set different dataType to wrap the output
 ### text
-Returns the inner text of article content.
-
-Example
+Returns the inner text of article content(strip html tags), e.g.:
 ```javascript
 read('http://example.com', {
   dataType: 'text'
@@ -121,9 +87,7 @@ read('http://example.com', {
 ```
 
 ### html
-Returns the inner HTML of article content.
-
-Example
+Returns the inner HTML of article content, e.g.:
 ```javascript
 read('http://example.com', {
   dataType: 'html'
@@ -144,8 +108,7 @@ read('http://example.com', {
 ```
 
 ### json
-Returns the restful result of article content.
-Example
+Returns the restful result of article content, e.g.:
 ```javascript
 read('http://example.com', {
   dataType: 'json'
@@ -164,39 +127,66 @@ read('http://example.com', {
   // art.content will be formatted as JSON
 });
 ```
-the art.content will be an Array
+The art.content will be an Array such as:
 ```json
 [
   { "type": "img", "value": "http://example.com/jpg/site1/20140519/00188b1996f214e3a25417.jpg" },
   { "type": "text", "value": "TEXT goes here..." }
 ]
 ```
-there only two type were supported now: *img* and *text*
+There only two types were supported now: *img* and *text*
 
-As you see, the dataType could be defined in two way:
+As you see, the dataType could be defined in two ways:
 1. Simple String, should be one of *text*, *html* and *json*.
-2. Complex Object, including keys:
+2. Complex Object, including:
   - type: one of *text*, *html* and *json*, default as 'html'.
   - stripSpaces: a value indicating whether strip tab symbols(\r\t\n), default as false.
 
-## Features
+## Powerful
 __&#991; Blazingly fast:__
 read-art is based on cheerio(cheerio is about __8x__ faster than JSDOM), and the article marking strategy actualized by RegExp, it's supper fast and cost less memory.
 
 __&#10084; Hit the target:__
-the bonus algorithm make spider or scraper more easier to grab the article title & content.
+The bonus algorithm make spider or scraper more easier to grab the article title & content.
 
-__&#10049; Fetch:__
-if you only wanna fetch html body by url, [fetch](https://github.com/andris9/fetch) is an amazing library, i've test it with [request](https://github.com/mikeal/request), it's really fast and cost less memory, reference to [Vadim's Issue](https://github.com/bndr/node-read/pull/15)
-and more important, **fetch** could avoid messy code in 99.9% conditions, event some pages using *utf8* in response headers, but *gb2312* in html head meta, we only need to use the overrideCharset option, e.g.:
+__&#8629; Fetch HTML:__
+If you only wanna fetch html body from server, [req-fast](https://github.com/Tjatse/req-fast) is amazing, it supports:
+- Follow Redirects
+- Automatic Decoding Content Encodings(Avoid Messy Codes, Especially Chinese)
+- Cookies
+- JSON Response Auto Handling
+- Gzip/Deflate Encoding(Automatic Decompress)
+- Proxy
+
+**refrain from the crazy messy codes**
 ```javascript
 read('http://game.163.com/14/0506/10/9RI8M9AO00314SDA.html', {
-  overrideCharset: 'gbk'
+  charset: 'gbk'
 }, function(err, art){
-  ...
+  // ...
 });
 ```
-to refrain from the crazy messy codes.
+**generate agent to simulate browsers**
+```javascript
+read('http://example.com', {
+  agent: true // true as default
+}, function(err, art){
+  // ...
+});
+```
+**use proxy**
+```javascript
+read('http://example.com', {
+  proxy: {
+    host: 'http://myproxy.com/',
+    port: 8081,
+    proxyAuth: 'user:password'
+  }
+}, function(err, art){
+  // ...
+});
+```
+and [more](https://github.com/Tjatse/req-fast) is amazing, it supports...
 
 ## Test
 cd to the read-art directory and install all the dependencies library.
