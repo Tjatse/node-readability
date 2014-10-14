@@ -28,7 +28,7 @@ read-art is designed to be the simplest way possible to make web-article scrape,
 
   * **html/uri** Html or Uri string.
   * **options** An optional options object, including:
-    - **dataType** The data type of article content, including: html, text. see more @[Output](#output)
+    - **output** The data type of article content, including: html, text. see more @[Output](#output)
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` as default.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
@@ -64,12 +64,12 @@ read({ uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></bo
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
 ## Output
-You can set different dataType to wrap the output
+You can set different types to wrap the output
 ### text
 Returns the inner text of article content(strip html tags), e.g.:
 ```javascript
 read('http://example.com', {
-  dataType: 'text'
+  output: 'text'
 }, function(err, art){
   // art.content will be formatted as TEXT
 });
@@ -77,7 +77,7 @@ read('http://example.com', {
 and the full usage
 ```javascript
 read('http://example.com', {
-  dataType: {
+  output: {
     type: 'text',
     stripSpaces: true
   }
@@ -90,7 +90,7 @@ read('http://example.com', {
 Returns the inner HTML of article content, e.g.:
 ```javascript
 read('http://example.com', {
-  dataType: 'html'
+  output: 'html'
 }, function(err, art){
   // art.content will be formatted as HTML
 });
@@ -98,7 +98,7 @@ read('http://example.com', {
 and the full usage
 ```javascript
 read('http://example.com', {
-  dataType: {
+  output: {
     type: 'html',
     stripSpaces: true
   }
@@ -111,7 +111,7 @@ read('http://example.com', {
 Returns the restful result of article content, e.g.:
 ```javascript
 read('http://example.com', {
-  dataType: 'json'
+  output: 'json'
 }, function(err, art){
   // art.content will be formatted as JSON
 });
@@ -119,7 +119,7 @@ read('http://example.com', {
 and the full usage
 ```javascript
 read('http://example.com', {
-  dataType: {
+  output: {
     type: 'json',
     stripSpaces: true
   }
@@ -136,7 +136,7 @@ The art.content will be an Array such as:
 ```
 There only two types were supported now: *img* and *text*
 
-As you see, the dataType could be defined in two ways:
+As you see, the output could be defined in two ways:
 1. Simple String, should be one of *text*, *html* and *json*.
 2. Complex Object, including:
   - type: one of *text*, *html* and *json*, default as 'html'.
