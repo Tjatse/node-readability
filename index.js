@@ -61,11 +61,11 @@ function read(uri, options, callback){
   // fetch body or straight convert to article.
   if (options.uri) {
     req(options, function(err, resp) {
-      if (err) {
-        return callback(err);
+      if (err || !resp) {
+        return callback(err || new Error('Response is empty.'));
       }
-      if(resp.statusCode != 200){
-        return callback(new Error('STATUS: ' + resp.statusCode));
+      if(!resp.body){
+        return callback(new Error('No body was found.'));
       }
 
       parsingData.html = resp.body.toString();
