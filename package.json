@@ -1,6 +1,6 @@
 {
   "name": "read-art",
-  "version": "0.2.3",
+  "version": "0.2.7",
   "description": "Scrape article from any page, automatically, make web page readability.",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "cheerio": "~0.15.0",
-    "req-fast": "~0.2.0",
+    "req-fast": "~0.2.1",
     "URIjs": "^1.14.0"
   },
   "devDependencies": {
