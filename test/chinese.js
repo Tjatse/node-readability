@@ -18,7 +18,7 @@ describe('gbk encoding sites',function(){
     });
   });
 
-  describe('news.cnfol.com',function(){
+  describe.skip('news.cnfol.com',function(){
     it('should have title & content',function(done){
       read('http://news.cnfol.com/zhengquanyaowen/20140509/17814941.shtml', function(err, art){
         should.not.exist(err);
@@ -30,7 +30,7 @@ describe('gbk encoding sites',function(){
     });
   });
 
-  describe('biz.xinmin.cn',function(){
+  describe.skip('biz.xinmin.cn',function(){
     it('should have title & content',function(done){
       read('http://biz.xinmin.cn/2014/05/09/24267182.html', function(err, art){
         should.not.exist(err);
@@ -42,7 +42,7 @@ describe('gbk encoding sites',function(){
     });
   });
 
-  describe('www.yicai.com',function(){
+  describe.skip('www.yicai.com',function(){
     it('should have title & content',function(done){
       read('http://www.yicai.com/news/2014/05/3793493.html', function(err, art){
         should.not.exist(err);
