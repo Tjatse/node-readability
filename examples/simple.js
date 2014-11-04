@@ -3,6 +3,7 @@ var read = require('../');
 
 read('http://baike.baidu.com/view/3974030.htm?fr=aladdin', {
     timeout: 15000,
+    disableGzip: true,
     output: {
         type: 'html',
         stripSpaces: true
