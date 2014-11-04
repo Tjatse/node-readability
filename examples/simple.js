@@ -1,7 +1,7 @@
 
 var read = require('../');
 
-read('http://www.bbc.com/sport/0/football/29053651', {
+read('http://baike.baidu.com/view/3974030.htm?fr=aladdin', {
     timeout: 15000,
     dataType: {
         type: 'html',
