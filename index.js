@@ -92,10 +92,11 @@ function parse(o) {
     o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ');
   }
 
-  var co = {};
+  var co = {decodeEntities: false};
   ['normalizeWhitespace', 'xmlMode', 'lowerCaseTags'].forEach(function(n){
     co[n] = !!o.options[n];
   });
+
   var $ = cheerio.load(o.html, co);
   o.callback(null, new Article($, o.options), o.options);
 }
