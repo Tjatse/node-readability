@@ -1,3 +1,7 @@
+# 2014/11/05
+- Decode HTML entities manually
+- Update documentation
+
 # 2014/10/30
 - Remove broken test sites
 - Update dependencies
