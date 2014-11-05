@@ -23,7 +23,7 @@ describe('English sites',function(){
         should.not.exist(err);
         expect(art).to.be.an('object');
         art.content.should.contain('The erosion of control will set North Korea free, not engagement with the regime.');
-        art.title.should.equal('Defector: Shadowy organization, not Kim Jong Un, controls North Korea – Amanpour');
+        art.title.should.equal('Defector: Shadowy organization, not Kim Jong Un, controls North Korea');
         done();
       });
     });
