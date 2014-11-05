@@ -1,5 +1,6 @@
-# read-art
-[![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fury.io/js/read-art) [![Build Status](https://travis-ci.org/Tjatse/node-readability.svg?branch=master)](https://travis-ci.org/Tjatse/node-readability)
+read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fury.io/js/read-art) [![Build Status](https://travis-ci.org/Tjatse/node-readability.svg?branch=master)](https://travis-ci.org/Tjatse/node-readability)
+=========
+[![NPM](https://nodei.co/npm/read-art.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/read-art/)
 
 1. Readability reference to Arc90's.
 2. Scrape article from any page, automatically.
@@ -10,11 +11,13 @@
 **NOTES: the property `dataType` was changed to `output`, sorry for that.**
 
 ## Features
-- Automatic Read Title & Body
+- Fast speed base on Cheerio
+- Automatic Read Title & Content
 - Follow Redirects
 - Automatic Decoding Content Encodings(Avoid Messy Codes, Especially Chinese)
 - Gzip/Deflate Encoding(Automatic Decompress)
 - Proxy
+- Generate User-Agent
 
 ## Installation
 ```javascript
@@ -30,7 +33,7 @@ read-art is designed to be the simplest way possible to make web-article scrape,
 
   * **html/uri** Html or Uri string.
   * **options** An optional options object, including:
-    - **output** The data type of article content, including: html, text. see more @[Output](#output)
+    - **output** The data type of article content, including: html, text. see more from [Output](#output)
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` as default.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
@@ -66,7 +69,7 @@ read({ uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></bo
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
 ## Output
-You can set different types to wrap the output
+You can set different types to wrap the outputs
 ### text
 Returns the inner text of article content(strip html tags), e.g.:
 ```javascript
@@ -75,9 +78,7 @@ read('http://example.com', {
 }, function(err, art){
   // art.content will be formatted as TEXT
 });
-```
-and the full usage
-```javascript
+// or
 read('http://example.com', {
   output: {
     type: 'text',
@@ -96,9 +97,7 @@ read('http://example.com', {
 }, function(err, art){
   // art.content will be formatted as HTML
 });
-```
-and the full usage
-```javascript
+// or
 read('http://example.com', {
   output: {
     type: 'html',
@@ -117,9 +116,7 @@ read('http://example.com', {
 }, function(err, art){
   // art.content will be formatted as JSON
 });
-```
-and the full usage
-```javascript
+// or
 read('http://example.com', {
   output: {
     type: 'json',
@@ -136,7 +133,7 @@ The art.content will be an Array such as:
   { "type": "text", "value": "TEXT goes here..." }
 ]
 ```
-There only two types were supported now: *img* and *text*
+There only two types are supported now: *img* and *text*
 
 As you see, the output could be defined in two ways:
 1. Simple String, should be one of *text*, *html* and *json*.
@@ -144,23 +141,8 @@ As you see, the output could be defined in two ways:
   - type: one of *text*, *html* and *json*, default as 'html'.
   - stripSpaces: a value indicating whether strip tab symbols(\r\t\n), default as false.
 
-## Powerful
-__&#991; Blazingly fast:__
-read-art is based on cheerio(cheerio is about __8x__ faster than JSDOM), and the article marking strategy actualized by RegExp, it's supper fast and cost less memory.
-
-__&#10084; Hit the target:__
-The bonus algorithm make spider or scraper more easier to grab the article title & content.
-
-__&#8629; Fetch HTML:__
-If you only wanna fetch html body from server, [req-fast](https://github.com/Tjatse/req-fast) is amazing, it supports:
-- Follow Redirects
-- Automatic Decoding Content Encodings(Avoid Messy Codes, Especially Chinese)
-- Cookies
-- JSON Response Auto Handling
-- Gzip/Deflate Encoding(Automatic Decompress)
-- Proxy
-
-**refrain from the crazy messy codes**
+## Features
+### Refrain from the crazy messy codes
 ```javascript
 read('http://game.163.com/14/0506/10/9RI8M9AO00314SDA.html', {
   charset: 'gbk'
@@ -168,7 +150,8 @@ read('http://game.163.com/14/0506/10/9RI8M9AO00314SDA.html', {
   // ...
 });
 ```
-**generate agent to simulate browsers**
+
+### Generate agent to simulate browsers
 ```javascript
 read('http://example.com', {
   agent: true // true as default
@@ -176,7 +159,8 @@ read('http://example.com', {
   // ...
 });
 ```
-**use proxy**
+
+### Use proxy to avoid being blocked.
 ```javascript
 read('http://example.com', {
   proxy: {
@@ -188,29 +172,25 @@ read('http://example.com', {
   // ...
 });
 ```
-and [more](https://github.com/Tjatse/req-fast) is amazing, it supports...
 
 ## Test
-cd to the read-art directory and install all the dependencies library.
-
-```javascript
+```
 npm test
 ```
 
 ## Other Library
 ### [luin/node-readability](https://github.com/luin/node-readability)
-luin/node-readability is really good, lots of hit points, easy to use, but the problem is - it's too slow, make me mad. it was based on JSDOM, as you known, the HTML must be strict, you can not make any mistake, e.g.:
+luin/node-readability is the first module which implements Readability in node.js, lots of hit points, easy to use, but the problem is - Too slow. It was based on `JSDOM`, the HTML must be written in strict mode, you can not make any mistake, e.g.:
 
 ```html
 <P>Paragraphs</p>
 <p>My book name is <read-art></p>
 <div><p>Hey, dude!</div>
 ```
-all above will cause hiberarchy errors.
-and otherwise, JSDOM is a memory killer.
+All above will cause hiberarchy errors, and otherwise, `JSDOM` is a memory killer.
 
 ### [bndr/node-read](https://github.com/bndr/node-read)
-bndr/node-read is amazing, and i've worked on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. so i decided to write it on my own.
+bndr/node-read is good, and I've contributed on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. So I decided to write it on my own.
 
 ## TODO
 - [x] get video, img tags
