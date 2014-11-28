@@ -1,3 +1,7 @@
+# 2014/11/28
+- RexExp of videos
+- Update documentation
+
 # 2014/11/05
 - Decode HTML entities manually
 - Update documentation
