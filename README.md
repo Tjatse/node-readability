@@ -19,9 +19,9 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - Generate User-Agent
 
 ## Performance
-In my case, the indexed data is about 400 thousand per day, 10 million per month, and the maximum index speed is 35/second, the memory cost are limited under 100 megabytes.
+In my case, the indexed data is about **400 thousand per day**, **10 million per month**, and the maximize indexing speed is **35/second**, the memory cost are limited **under 100 megabytes**.
 
-**Pictures don't lie**
+**Pictures don't lie:**
 
 ![image](screenshots/es.jpg)
 
@@ -64,9 +64,7 @@ It supports the definitions such as:
 ```javascript
 var read = require('read-art');
 // read from google:
-read('http://google.com', {
-    charset: 'utf8'
-  }, function(err, art, options){
+read('http://google.com', function(err, art, options){
     if(err){
       throw err;
     }
@@ -82,15 +80,12 @@ read({
 
 });
 // what about html?
-read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', {
-  charset: 'utf8'
-}, function(err, art, options){
+read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', function(err, art, options){
 
 });
 // of course could be
 read({
-    uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>',
-    charset: 'utf8'
+    uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>'
   }, function(err, art, options){
 
 });
@@ -146,10 +141,10 @@ read('http://example.com', {
 });
 ```
 
-**Notes** videos could be scraped now, including `youtube|vimeo|youku|tudou|56|letv|iqiyi|sohu|sina|163`.
+**Notes** Videos could be scraped now, the domains currently are supported: *youtube|vimeo|youku|tudou|56|letv|iqiyi|sohu|sina|163*.
 
 ### json
-Returns the restful results, e.g.:
+Returns the restful result, e.g.:
 ```javascript
 read('http://example.com', {
   output: 'json'
@@ -175,9 +170,9 @@ The art.content will be an Array such as:
 ]
 ```
 
-**Notes** The video sources of the sites are quite different, it's hard to fit all in a common way, I haven't find a good way to solve that, PRs are in demand.
+Util now there are only two types - *img* and *text*, the `src` of `img` element is absolute even if the original is a relative one.
 
-There are only two types - *img* and *text*
+**Notes** The video sources of the sites are quite different, it's hard to fit all in a common way, I haven't find a good way to solve that, PRs are in demand.
 
 
 ## You Should Known
@@ -219,7 +214,7 @@ npm test
 
 ## Other Library
 ### [luin/node-readability](https://github.com/luin/node-readability)
-luin/node-readability is an old Readability that be transformed from **Arc90**, easy to use, but the problem is - Too slow. It was based on `JSDOM`, the HTML must be written in strict mode, you can not make any mistake, like:
+luin/node-readability is an old Readability that be transformed from **Arc90**, easy to use, but the problem is - TOO SLOW. It was based on `jsdom`, so, the HTML must be written in strict mode, which means you can not make any mistake, e.g.:
 
 ```html
 <P>Paragraphs</p>
@@ -227,7 +222,7 @@ luin/node-readability is an old Readability that be transformed from **Arc90**, 
 <div><p>Hey, dude!</div>
 ```
 
-All above will cause hiberarchy errors, and otherwise, `JSDOM` is a memory killer.
+All above will cause `hiberarchy errors`, more seriously, `jsdom` is a memory killer.
 
 ### [bndr/node-read](https://github.com/bndr/node-read)
 I've contributed on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. So I decided to write it on my own.
