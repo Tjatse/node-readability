@@ -15,9 +15,10 @@
 
 "use strict";
 
-var req = require('req-fast'),
-  cheerio = require('cheerio'),
-  Article = require('./lib/article');
+var req     = require('req-fast'),
+    cheerio = require('cheerio'),
+    util    = require('util'),
+    Article = require('./lib/article');
 
 module.exports = read;
 
@@ -31,47 +32,50 @@ module.exports = read;
  */
 function read(uri, options, callback){
   // organize parameters
-  if ((typeof options === 'function') && !callback){
+  if ((typeof options === 'function') && !callback) {
     callback = options;
   }
   if (options && typeof options === 'object') {
     options.uri = uri;
   } else if (typeof uri === 'string') {
-    options = { uri: uri };
+    options = {uri: uri};
   } else {
     options = uri;
     uri = options.uri || options.html;
   }
-  defineOption(options, 'killBreaks', true);
-  defineOption(options, 'lowerCaseTags', true);
-  defineOption(options, 'output', 'html');
+  options = util._extend({
+    killBreaks   : true,
+    lowerCaseTags: true,
+    output       : 'html',
+    minTextLength: 25
+  }, options);
 
   // indicating uri is html or url.
   var isHTML = uri.match(/^\s*</);
-  if(isHTML && options.uri && !options.html){
+  if (isHTML && options.uri && !options.html) {
     options.html = options.uri;
     delete options.uri;
   }
 
   var parsingData = {
-    html: uri,
-    options: options,
+    html    : uri,
+    options : options,
     callback: callback
   };
   // fetch body or straight convert to article.
   if (options.uri) {
-    req(options, function(err, resp) {
+    req(options, function(err, resp){
       if (err || !resp) {
         return callback(err || new Error('Response is empty.'));
       }
-      if(!resp.body){
-        return callback(new Error('No body was found.'));
+      if (!resp.body) {
+        return callback(new Error('No body was found, status code: ' + resp.statusCode));
       }
 
       parsingData.html = resp.body.toString();
       parse(parsingData);
     });
-  }else{
+  } else {
     parse(parsingData);
   }
 }
@@ -81,13 +85,13 @@ function read(uri, options, callback){
  * @param o options
  * @return {String}
  */
-function parse(o) {
-  if (!o.html){
+function parse(o){
+  if (!o.html) {
     return '';
   }
-  if(o.options.killBreaks){
+  if (o.options.killBreaks) {
     // replace <br />(blanks goes here) to <br />.
-    o.html = o.html.replace(/(<br\s*\/?>(\s|&nbsp;?)*){1,}/g,'<br />');
+    o.html = o.html.replace(/(<br\s*\/?>(\s|&nbsp;?)*){1,}/g, '<br />');
     // remove tab symbols like \r\t\n
     o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ');
   }
@@ -99,16 +103,4 @@ function parse(o) {
 
   var $ = cheerio.load(o.html, co);
   o.callback(null, new Article($, o.options), o.options);
-}
-
-/**
- * Define property of object to default value.
- * @param options option object
- * @param k key
- * @param v value
- */
-function defineOption(options, k, v){
-  if(typeof options[k] == 'undefined'){
-    options[k] = v;
-  }
 }
