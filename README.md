@@ -31,12 +31,9 @@ In my case, the indexed data is about **400 thousand per day**, **10 million per
 
 ![image](screenshots/search.jpg)
 
-Maybe you wanna known:
-- All the spiders are managed by [PM2](https://github.com/Unitech/PM2) (I am currently working on that with friends, very welcome to use the amazing tool).
+### Gochas
+- All the spiders are managed by [PM2](https://github.com/Unitech/PM2) (I am currently working on that with friends, very welcome to use this amazing tool).
 - Loose coupling between Spiders, Indexers and Data, they're queued by NSQ.
-
-## Pure Example With High Availability
-[spider2](https://github.com/Tjatse/spider2)
 
 ## Installation
 ```javascript
@@ -63,7 +60,9 @@ It supports the definitions such as:
 
 > See test or examples folder for a complete example
 
-### Simple Examples
+### Examples
+With High Availability: [spider2](https://github.com/Tjatse/spider2)
+
 ```javascript
 var read = require('read-art');
 // read from google:
@@ -113,7 +112,6 @@ There are two effective ways to do this:
   ```
 
   The elements which have the `w740` className will get `100` bonus points, that will make the `node` to be the *topCandidate*, which means it's enough to make the `text` of `DIV/P.w740` to be the content of current article.
-
 
 ### Example
 ```javascript
@@ -271,8 +269,6 @@ I've contributed on this for a while, but it's hard to communicate with Vadim(we
 - [ ] pagination
 
 ## License
-Copyright 2014 Tjatse
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

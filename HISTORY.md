@@ -1,5 +1,5 @@
 # 2015/01/03
-- Custom Score Rule
+- Custom score rule supports
 - Options.minTextLength supports
 - Update dependencies
 
