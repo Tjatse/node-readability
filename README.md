@@ -54,8 +54,11 @@ It supports the definitions such as:
   * **options** An optional options object, including:
     - **output** The data type of article content, including: `html`, `text` or `json`. see more from [Output](#output)
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` by default.
+    - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
+    - **scoreRule** Custom the score rules of each node, head over to [Score Rule](#score_rule) to get more information. One arguments will be passed into the callback function:
+      - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
   * **callback** The callback to run - `callback(error, article, options)`
 
 > See test or examples folder for a complete example
@@ -91,6 +94,40 @@ read({
 });
 ```
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
+
+<a name="score_rule" />
+## Score Rule
+In some situations, we need to custom score rules to grab the correct content of article, such as BBS and QA forums.
+There are two effective ways to do this:
+- **minTextLength**
+  It's useful to get rid of useless elements (`P` / `DIV`), e.g. `minTextLength: 100` will dump all the blocks that `node.text().length` is less than `100`.
+
+- **scoreRule**
+  You can custom the score rules manually, e.g.:
+  ```javascript:
+  scoreRule: function(node){
+    if (node.hasClass('w740')) {
+      return 100;
+    }
+  }
+  ```
+
+  The elements which have the `w740` className will get `100` bonus points, that will make the `node` to be the *topCandidate*, which means it's enough to make the `text` of `DIV/P.w740` to be the content of current article.
+
+
+### Example
+```javascript
+read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
+  minTextLength: 0,
+  scoreRule: function(node){
+    if (node.hasClass('w740')) {
+      return 100;
+    }
+  }
+}, function(err, art){
+
+});
+```
 
 ## Output
 You can wrap the content of article with different types, the `output` option could be:
