@@ -5,7 +5,7 @@ var read = require('../'),
 
 describe('output',function(){
 
-  describe('dataType is text',function(){
+  describe('output is text',function(){
     it('should have no tag',function(done){
       read('<title>read-art</title><body><div><div><img src="test1.jpg" /><img src="test2.jpg" /></div><p>hi, dude, i am readability, aka read-art...</p></div></body>', {
         output: 'text'
@@ -18,7 +18,7 @@ describe('output',function(){
       });
     });
   });
-  describe('dataType is html',function(){
+  describe('output is html',function(){
     it('should have tag',function(done){
       read('<title>read-art</title><body><div><div><img src="test1.jpg" /><img src="test2.jpg" /></div><p>hi, dude, i am readability, aka read-art...</p></div></body>', {
         output: 'html'
@@ -32,7 +32,7 @@ describe('output',function(){
     });
   });
 
-  describe('dataType is json',function(){
+  describe('output is json',function(){
     it('should be an Array',function(done){
       read('<title>read-art</title><body><div><div><img src="test1.jpg" /><img src="test2.jpg" /></div><p>hi, dude, i am readability, aka read-art...</p></div></body>', {
         output: 'json'

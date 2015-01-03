@@ -3,10 +3,16 @@ var read   = require('../'),
     expect = chai.expect,
     should = chai.should();
 
-var uri = 'http://stackoverflow.com/questions/21126385/a-sh-line-that-scares-me-is-it-portable/21127377#21127377',
-    html;
+var uri, html;
 describe('extract content', function(){
-
+  before(function(){
+    uri = 'http://stackoverflow.com/questions/21126385/a-sh-line-that-scares-me-is-it-portable/21127377#21127377';
+    html = '';
+  });
+  after(function(){
+    uri = null;
+    html = null;
+  });
   describe('while minTextLength set to 1000', function(){
     it('should works unexpected', function(done){
       read(uri, {
