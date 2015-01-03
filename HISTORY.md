@@ -1,3 +1,8 @@
+# 2015/01/03
+- Custom Score Rule
+- Options.minTextLength supports
+- Update dependencies
+
 # 2014/11/28
 - RexExp of videos
 - Update documentation
