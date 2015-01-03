@@ -27,8 +27,8 @@
     "node >= 0.8.0"
   ],
   "dependencies": {
-    "cheerio": "~0.17.0",
-    "req-fast": "^0.2.2",
+    "cheerio": "~0.18.0",
+    "req-fast": "^0.2.7",
     "URIjs": "^1.14.0",
     "entities": "~1.1.1"
   },
