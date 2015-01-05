@@ -68,13 +68,14 @@ read(html/uri [, options], callback)
 It supports the definitions such as:
   * **html/uri** Html or Uri string.
   * **options** An optional options object, including:
-    - **output** The data type of article content, including: `html`, `text` or `json`. see more from [Output](#output)
+    - **output** The data type of article content, including: `html`, `text` or `json` (head over to [Output](#output) to get more information).
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` by default.
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
-    - **scoreRule** Custom the score rules of each node, head over to [Score Rule](#score_rule) to get more information. One arguments will be passed into the callback function:
+    - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function:
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
+    head over to [Score Rule](#score_rule) to get more information.
   * **callback** The callback to run - `callback(error, article, options)`
 
 > Head over to test or examples directory for a complete example.
@@ -162,17 +163,40 @@ The `[usage]` could be one of following:
 - `this.reset()`
   Reset the settings to default.
 - `this.skipTags([tags], [override])`
-  Remove useless elements by tagName, e.g. `this.skipTags('b,span')`, if `[override]` is set to `true`, `skiptags` will be `"b,span"`, otherwise it will be appended to the origin, i.e. `aside,footer,label,nav,noscript,script,link,meta,style,select,textarea,iframe,b,span`.
+  Remove useless elements by tagName, e.g. `this.skipTags('b,span')`, if `[override]` is set to `true`, `skiptags` will be `"b,span"`, otherwise it will be appended to the origin, i.e. :
+  ```
+  aside,footer,label,nav,noscript,script,link,meta,style,select,textarea,iframe,b,span
+  ```
+
 - `this.regexps.positive([re], [override])`
-  If `positive` regexp test `id` + `className` of node success, it will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `positive` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/article|blog|body|content|entry|main|news|pag(?:e|ination)|post|story|text|dv101|dv102/i`.
+  If `positive` regexp test `id` + `className` of node success, it will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `positive` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. :
+  ```
+  /article|blog|body|content|entry|main|news|pag(?:e|ination)|post|story|text|dv101|dv102/i
+  ```
+
 - `this.regexps.negative([re], [override])`
-  If `negative` regexp test `id` + `className` of node success, it will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `negative` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/com(?:bx|ment|-)|contact|comment|captcha|foot(?:er|note)?|link|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|util|shopping|tags|tool|widget|tip|dialog|copyright|bottom|dv101|dv102/i`.
+  If `negative` regexp test `id` + `className` of node success, it will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `negative` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. :
+  ```
+  /com(?:bx|ment|-)|contact|comment|captcha|foot(?:er|note)?|link|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|util|shopping|tags|tool|widget|tip|dialog|copyright|bottom|dv101|dv102/i
+  ```
+
 - `this.regexps.unlikely([re], [override])`
-  If `unlikely` regexp test `id` + `className` of node success, it probably will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `unlikely` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/agegate|auth?or|bookmark|cat|com(?:bx|ment|munity)|date|disqus|extra|foot|header|ignore|link|menu|nav|pag(?:er|ination)|popup|related|remark|rss|share|shoutbox|sidebar|similar|social|sponsor|teaserlist|time|tweet|twitter|\bad[\s_-]?\b|dv101|dv102/i`.
+  If `unlikely` regexp test `id` + `className` of node success, it probably will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `unlikely` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. :
+  ```
+  /agegate|auth?or|bookmark|cat|com(?:bx|ment|munity)|date|disqus|extra|foot|header|ignore|link|menu|nav|pag(?:er|ination)|popup|related|remark|rss|share|shoutbox|sidebar|similar|social|sponsor|teaserlist|time|tweet|twitter|\bad[\s_-]?\b|dv101|dv102/i
+  ```
+
 - `this.regexps.maybe([re], [override])`
-  If `maybe` regexp test `id` + `className` of node success, it probably will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `maybe` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/and|article|body|column|main|column|dv101|dv102/i`.
+  If `maybe` regexp test `id` + `className` of node success, it probably will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `maybe` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. :
+  ```
+  /and|article|body|column|main|column|dv101|dv102/i
+  ```
+
 - `this.regexps.div2p([re], [override])`
-  If `div2p` regexp test `id` + `className` of node success, all divs that don't have children block level elements will be turned into p's. `[re]` is a regexp, e.g. `/<(span|label)/` will match the element likes `<span>...` or `<label>...`, if `[override]` is set to `true`, `div2p` will be `/<(span|label)/i`, otherwise it will be appended to the origin, i.e. `/<(a|blockquote|dl|div|img|ol|p|pre|table|ul|span|label)/i`.
+  If `div2p` regexp test `id` + `className` of node success, all divs that don't have children block level elements will be turned into p's. `[re]` is a regexp, e.g. `/<(span|label)/` will match the element likes `<span>...` or `<label>...`, if `[override]` is set to `true`, `div2p` will be `/<(span|label)/i`, otherwise it will be appended to the origin, i.e. :
+  ```
+  /<(a|blockquote|dl|div|img|ol|p|pre|table|ul|span|label)/i
+  ```
 
 <a name="cus_sets_eg" />
 ### Example
