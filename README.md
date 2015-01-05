@@ -8,8 +8,25 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 
 > *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
+## Guide
+- Features(#features)
+- Performance(#perfs)
+- Installation(#ins)
+- Usage(#usage)
+  - Example(#usage_eg)
+- Score Rule(#score_rule)
+  - Example(#score_rule_eg)
+- Customize Settings(#cus_sets)
+  - Example(#cus_sets_eg)
+- Output(#output)
+  - text(#output_text)
+  - html(#output_html)
+  - json(#output_json)
+- Notes(#notes)
+
+<a name="features" />
 ## Features
-- Faster Than Any Readability Module
+- Fast And Shoot Straight.
 - High Performance - Less memory
 - Automatic Read Title & Content
 - Follow Redirects
@@ -18,6 +35,7 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - Proxy Support
 - Generate User-Agent
 
+<a name="perfs" />
 ## Performance
 In my case, the indexed data is about **400 thousand per day**, **10 million per month**, and the maximize indexing speed is **35/second**, the memory cost are limited **under 100 megabytes**.
 
@@ -31,22 +49,23 @@ In my case, the indexed data is about **400 thousand per day**, **10 million per
 
 ![image](screenshots/search.jpg)
 
-### Gochas
+**Notes**
 - All the spiders are managed by [PM2](https://github.com/Unitech/PM2) (I am currently working on that with friends, very welcome to use this amazing tool).
 - Loose coupling between Spiders, Indexers and Data, they're queued by NSQ.
 
+<a name="ins" />
 ## Installation
 ```javascript
 npm install read-art
 ```
 
+<a name="usage" />
 ## Usage
 ```javascript
 read(html/uri [, options], callback)
 ```
 
 It supports the definitions such as:
-
   * **html/uri** Html or Uri string.
   * **options** An optional options object, including:
     - **output** The data type of article content, including: `html`, `text` or `json`. see more from [Output](#output)
@@ -58,11 +77,10 @@ It supports the definitions such as:
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
   * **callback** The callback to run - `callback(error, article, options)`
 
-> See test or examples folder for a complete example
+> Head over to test or examples directory for a complete example.
 
+<a name="usage_eg" />
 ### Examples
-With High Availability: [spider2](https://github.com/Tjatse/spider2)
-
 ```javascript
 var read = require('read-art');
 // read from google:
@@ -94,15 +112,17 @@ read({
 ```
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
+**With High Availability: [spider2](https://github.com/Tjatse/spider2)**
+
 <a name="score_rule" />
 ## Score Rule
-In some situations, we need to custom score rules to grab the correct content of article, such as BBS and QA forums.
+In some situations, we need to customize score rules to grab the correct content of article, such as BBS and QA forums.
 There are two effective ways to do this:
 - **minTextLength**
   It's useful to get rid of useless elements (`P` / `DIV`), e.g. `minTextLength: 100` will dump all the blocks that `node.text().length` is less than `100`.
 
 - **scoreRule**
-  You can custom the score rules manually, e.g.:
+  You can customize the score rules manually, e.g.:
   ```javascript:
   scoreRule: function(node){
     if (node.hasClass('w740')) {
@@ -113,6 +133,7 @@ There are two effective ways to do this:
 
   The elements which have the `w740` className will get `100` bonus points, that will make the `node` to be the *topCandidate*, which means it's enough to make the `text` of `DIV/P.w740` to be the content of current article.
 
+<a name="score_rule_eg" />
 ### Example
 ```javascript
 read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
@@ -127,6 +148,43 @@ read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
 });
 ```
 
+<a name="cus_sets" />
+## Customize Settings
+We're using different regexps to iterates over elements (cheerio objects), and removing undesirable nodes.
+```javascript
+read.use(function(){
+  //[usage]
+});
+
+```
+
+The `[usage]` could be one of following:
+- `this.reset()`
+  Reset the settings to default.
+- `this.skipTags([tags], [override])`
+  Remove useless elements by tagName, e.g. `this.skipTags('b,span')`, if `[override]` is set to `true`, `skiptags` will be `"b,span"`, otherwise it will be appended to the origin, i.e. `aside,footer,label,nav,noscript,script,link,meta,style,select,textarea,iframe,b,span`.
+- `this.regexps.positive([re], [override])`
+  If `positive` regexp test `id` + `className` of node success, it will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `positive` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/article|blog|body|content|entry|main|news|pag(?:e|ination)|post|story|text|dv101|dv102/i`.
+- `this.regexps.negative([re], [override])`
+  If `negative` regexp test `id` + `className` of node success, it will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `negative` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/com(?:bx|ment|-)|contact|comment|captcha|foot(?:er|note)?|link|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|util|shopping|tags|tool|widget|tip|dialog|copyright|bottom|dv101|dv102/i`.
+- `this.regexps.unlikely([re], [override])`
+  If `unlikely` regexp test `id` + `className` of node success, it probably will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `unlikely` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/agegate|auth?or|bookmark|cat|com(?:bx|ment|munity)|date|disqus|extra|foot|header|ignore|link|menu|nav|pag(?:er|ination)|popup|related|remark|rss|share|shoutbox|sidebar|similar|social|sponsor|teaserlist|time|tweet|twitter|\bad[\s_-]?\b|dv101|dv102/i`.
+- `this.regexps.maybe([re], [override])`
+  If `maybe` regexp test `id` + `className` of node success, it probably will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `maybe` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. `/and|article|body|column|main|column|dv101|dv102/i`.
+- `this.regexps.div2p([re], [override])`
+  If `div2p` regexp test `id` + `className` of node success, all divs that don't have children block level elements will be turned into p's. `[re]` is a regexp, e.g. `/<(span|label)/` will match the element likes `<span>...` or `<label>...`, if `[override]` is set to `true`, `div2p` will be `/<(span|label)/i`, otherwise it will be appended to the origin, i.e. `/<(a|blockquote|dl|div|img|ol|p|pre|table|ul|span|label)/i`.
+
+<a name="cus_sets_eg" />
+### Example
+```javascript
+read.use(function(){
+  this.reset();
+  this.skipTags('b,span');
+  this.regexps.div2p(/<(span|b)/, true);
+});
+```
+
+<a name="output" />
 ## Output
 You can wrap the content of article with different types, the `output` option could be:
 - **String**
@@ -138,6 +196,7 @@ You can wrap the content of article with different types, the `output` option co
   - **stripSpaces**
     A value indicates whether strip the tab symbols (\r\n\t) or not, `false` by default.
 
+<a name="output_text" />
 ### text
 Returns the inner text, e.g.:
 ```javascript
@@ -157,6 +216,7 @@ read('http://example.com', {
 });
 ```
 
+<a name="output_html" />
 ### html
 Returns the inner HTML, e.g.:
 ```javascript
@@ -178,6 +238,7 @@ read('http://example.com', {
 
 **Notes** Videos could be scraped now, the domains currently are supported: *youtube|vimeo|youku|tudou|56|letv|iqiyi|sohu|sina|163*.
 
+<a name="output_json" />
 ### json
 Returns the restful result, e.g.:
 ```javascript
@@ -209,9 +270,9 @@ Util now there are only two types - *img* and *text*, the `src` of `img` element
 
 **Notes** The video sources of the sites are quite different, it's hard to fit all in a common way, I haven't find a good way to solve that, PRs are in demand.
 
-
-## You Should Known
-### Pass the charset manually to refrain from the crazy messy codes
+<a name="notes" />
+## Notes / Gotchas
+**Pass the charset manually to refrain from the crazy messy codes**
 ```javascript
 read('http://game.163.com/14/0506/10/9RI8M9AO00314SDA.html', {
   charset: 'gbk'
@@ -220,7 +281,7 @@ read('http://game.163.com/14/0506/10/9RI8M9AO00314SDA.html', {
 });
 ```
 
-### Generate agent to simulate browsers
+**Generate agent to simulate browsers**
 ```javascript
 read('http://example.com', {
   agent: true // true as default
@@ -229,7 +290,7 @@ read('http://example.com', {
 });
 ```
 
-### Use proxy to avoid being blocked.
+**Use proxy to avoid being blocked**
 ```javascript
 read('http://example.com', {
   proxy: {
