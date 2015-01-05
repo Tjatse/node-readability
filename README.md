@@ -9,20 +9,20 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 > *快速抓取网页文章标题和内容，适合node.js爬虫使用，服务于ElasticSearch。*
 
 ## Guide
-- Features(#features)
-- Performance(#perfs)
-- Installation(#ins)
-- Usage(#usage)
-  - Example(#usage_eg)
-- Score Rule(#score_rule)
-  - Example(#score_rule_eg)
-- Customize Settings(#cus_sets)
-  - Example(#cus_sets_eg)
-- Output(#output)
-  - text(#output_text)
-  - html(#output_html)
-  - json(#output_json)
-- Notes(#notes)
+- [Features](#features)
+- [Performance](#perfs)
+- [Installation](#ins)
+- [Usage](#usage)
+  - [Example](#usage_eg)
+- [Score Rule](#score_rule)
+  - [Example](#score_rule_eg)
+- [Customize Settings](#cus_sets)
+  - [Example](#cus_sets_eg)
+- [Output](#output)
+  - [text](#output_text)
+  - [html](#output_html)
+  - [json](#output_json)
+- [Notes](#notes)
 
 <a name="features" />
 ## Features
