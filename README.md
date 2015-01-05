@@ -13,15 +13,9 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - [Performance](#perfs)
 - [Installation](#ins)
 - [Usage](#usage)
-  - [Example](#usage_eg)
 - [Score Rule](#score_rule)
-  - [Example](#score_rule_eg)
 - [Customize Settings](#cus_sets)
-  - [Example](#cus_sets_eg)
 - [Output](#output)
-  - [text](#output_text)
-  - [html](#output_html)
-  - [json](#output_json)
 - [Notes](#notes)
 
 <a name="features" />
@@ -73,9 +67,8 @@ It supports the definitions such as:
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
-    - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function:
+    - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
-    head over to [Score Rule](#score_rule) to get more information.
   * **callback** The callback to run - `callback(error, article, options)`
 
 > Head over to test or examples directory for a complete example.
