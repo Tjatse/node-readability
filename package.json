@@ -1,7 +1,7 @@
 {
   "name": "read-art",
-  "version": "0.3.2",
-  "description": "Scrape article from any page, automatically, make web page readability.",
+  "version": "0.3.3",
+  "description": "Scrape/Crawl article from any site automatically. Make any web page readable, no matter Chinese or English.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec -t 10000"
@@ -16,6 +16,8 @@
     "grab",
     "article",
     "spider",
+    "crawl",
+    "readable",
     "readability"
   ],
   "author": "Tjatse",
