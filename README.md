@@ -212,6 +212,8 @@ You can wrap the content of article with different types, the `output` option co
     One of `text`, `html` and `json`.
   - **stripSpaces**
     A value indicates whether strip the tab symbols (\r\n\t) or not, `false` by default.
+  - **break**
+    A value indicates whether split content into paragraphs by `<br />` (Only affects JSON output).
 
 <a name="output_text" />
 ### text
@@ -268,7 +270,8 @@ read('http://example.com', {
 read('http://example.com', {
   output: {
     type: 'json',
-    stripSpaces: true
+    stripSpaces: true,
+    break: true
   }
 }, function(err, art){
   // art.content will be formatted as Array

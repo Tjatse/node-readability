@@ -46,4 +46,37 @@ describe('output',function(){
       });
     });
   });
+
+  describe('output is json and do not break it down',function(){
+    it('should be an Array (length equals 1)',function(done){
+      read('<title>read-art</title><body><div><div></div><p><span>hi, dude,</span><br style=""/><span>i am readability, aka read-art...</span></p></div></body>', {
+        output: 'json'
+      }, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        expect(art.content).to.be.an('array');
+        expect(art.content).to.be.length(1);
+        art.title.should.equal('read-art');
+        done();
+      });
+    });
+  });
+
+  describe('output is json and break it down',function(){
+    it('should be an Array (length equals 2)',function(done){
+      read('<title>read-art</title><body><div><div></div><p><span>hi, dude,</span><br style=""/><span>i am readability, aka read-art...</span></p></div></body>', {
+        output: {
+          type: 'json',
+          break: true
+        }
+      }, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        expect(art.content).to.be.an('array');
+        expect(art.content).to.be.length(2);
+        art.title.should.equal('read-art');
+        done();
+      });
+    });
+  });
 });

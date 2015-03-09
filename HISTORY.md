@@ -1,3 +1,7 @@
+# 2015/03/10
+- Remove empty content in JSON output mode
+- Split content by `<br />` in JSON output mode
+
 # 2015/01/03
 - Custom score rule supports
 - Options.minTextLength supports

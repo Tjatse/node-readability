@@ -1,10 +1,11 @@
 var read = require('../');
 
-read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
+read('http://www.cqn.com.cn/auto/news/73572.html', {
   timeout  : 15000,
   output   : {
-    type       : 'text',
-    stripSpaces: true
+    type       : 'json',
+    stripSpaces: true,
+    break: true
   },
   minTextLength: 0,
   scoreRule: function(node){
