@@ -69,7 +69,11 @@ It supports the definitions such as:
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
-  * **callback** The callback to run - `callback(error, article, options)`
+  * **callback** The callback to run - `callback(error, article, options, response)`, arguments are:
+    - **error** `Error` object when exception has been caught.
+    - **article** The article object, including: `article.title`, `article.content` and `article.html`.
+    - **options** The request options.
+    - **response** The response of your request, including: `response.headers`, `response.redirects`, `response.cookies` and `response.statusCode`.
 
 > Head over to test or examples directory for a complete example.
 
@@ -78,29 +82,31 @@ It supports the definitions such as:
 ```javascript
 var read = require('read-art');
 // read from google:
-read('http://google.com', function(err, art, options){
+read('http://google.com', function(err, art, options, resp){
     if(err){
       throw err;
     }
     var title = art.title,      // title of article
         content = art.content,  // content of article
         html = art.html;        // whole original innerHTML
+
+    console.log('[STATUS CODE]', resp && resp.statusCode);
 });
 // or:
 read({
     uri: 'http://google.com',
     charset: 'utf8'
-  }, function(err, art, options){
+  }, function(err, art, options, resp){
 
 });
 // what about html?
-read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', function(err, art, options){
+read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', function(err, art, options, resp){
 
 });
 // of course could be
 read({
     uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>'
-  }, function(err, art, options){
+  }, function(err, art, options, resp){
 
 });
 ```

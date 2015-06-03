@@ -14,7 +14,7 @@ read('http://www.cqn.com.cn/auto/news/73572.html', {
     }
     return 0;
   }
-}, function(err, art){
+}, function(err, art, options, resp){
   if (err) {
     console.log('[ERROR]', err.message);
     return;

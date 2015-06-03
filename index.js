@@ -58,7 +58,8 @@ function read(uri, options, callback){
       }
 
       parsingData.html = resp.body.toString();
-      parse(parsingData);
+      delete resp.body;
+      parse(parsingData, resp);
     });
   } else {
     parse(parsingData);
@@ -74,9 +75,10 @@ read.use = Article.use;
 /**
  * Parse html to cheerio dom.
  * @param o options
+ * @param e extra data
  * @return {String}
  */
-function parse(o){
+function parse(o, e){
   if (!o.html) {
     return '';
   }
@@ -93,5 +95,5 @@ function parse(o){
   });
 
   var $ = cheerio.load(o.html, co);
-  o.callback(null, new Article($, o.options), o.options);
+  o.callback(null, new Article($, o.options), o.options, e);
 }
