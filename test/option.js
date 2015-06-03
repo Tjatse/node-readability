@@ -8,7 +8,7 @@ var uri, html, charset;
 
 describe('different options',function(){
   before(function(){
-    uri = 'http://bing.com';
+    uri = 'http://www.bing.com';
     html = '<p>Hello, node-art</p>';
     charset = 'utf8';
   });
@@ -19,10 +19,11 @@ describe('different options',function(){
   });
   describe('have three arguments',function(){
     it('should detect two options',function(done){
-      read(uri, { charset: charset }, function(err, art, options){
+      read(uri, { charset: charset }, function(err, art, options, resp){
         should.not.exist(err);
         options.uri.should.be.equal(uri);
         options.charset.should.be.equal(charset);
+        resp.statusCode.should.be.equal(200)
         done();
       });
     });

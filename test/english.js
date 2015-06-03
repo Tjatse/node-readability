@@ -7,7 +7,16 @@ describe('English sites',function(){
 
   describe('theatlantic.com',function(){
     it('should have title & content',function(done){
-      read('http://www.theatlantic.com/international/archive/2014/05/the-last-man-at-nuremberg/361968/', function(err, art){
+      read({
+        uri: 'http://www.theatlantic.com/international/archive/2014/05/the-last-man-at-nuremberg/361968/',
+        scoreRule: function(node){
+          var id = node.attr('id');
+          if (id == 'article-section-1') {
+            return 100
+          }
+          return 0;
+        }
+      }, function(err, art){
         should.not.exist(err);
         expect(art).to.be.an('object');
         art.content.should.contain('Benjamin Ferencz was 27 when the');

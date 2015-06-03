@@ -58,7 +58,8 @@ function read(uri, options, callback){
       }
 
       parsingData.html = resp.body.toString();
-      parse(parsingData);
+      delete resp.body;
+      parse(parsingData, resp);
     });
   } else {
     parse(parsingData);
@@ -74,15 +75,16 @@ read.use = Article.use;
 /**
  * Parse html to cheerio dom.
  * @param o options
+ * @param e extra data
  * @return {String}
  */
-function parse(o){
+function parse(o, e){
   if (!o.html) {
     return '';
   }
   if (o.options.killBreaks) {
     // replace <br />(blanks goes here) to <br />.
-    o.html = o.html.replace(/(<br\s*\/?>(\s|&nbsp;?)*){1,}/g, '<br />');
+    o.html = o.html.replace(/<br[^\/>]*\/?>/ig, '<br />');
     // remove tab symbols like \r\t\n
     o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ');
   }
@@ -93,5 +95,5 @@ function parse(o){
   });
 
   var $ = cheerio.load(o.html, co);
-  o.callback(null, new Article($, o.options), o.options);
+  o.callback(null, new Article($, o.options), o.options, e);
 }
