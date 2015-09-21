@@ -4,7 +4,7 @@ var read = require('../'),
   should = chai.should();
 
 describe('gbk encoding sites',function(){
-  describe('override charset to avoid messy codes',function(){
+  describe.skip('override charset to avoid messy codes',function(){
     it('should have title & content',function(done){
       read('http://game.163.com/14/0506/10/9RI8M9AO00314SDA.html', {
         charset: 'gbk'
