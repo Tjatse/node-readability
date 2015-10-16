@@ -29,4 +29,17 @@ describe('html passing',function(){
     });
   });
 
+  describe('tidy attributes',function(){
+    it('should have no attributes on element',function(done){
+      read('<title>文章抓取</title><body><div><p style="font-size: 12px" data-id="10000">Hola!!!! Real Madrid!!!!!!!!!!!!!!</p></div></body>', {tidyAttrs: true}, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        art.content.should.not.contain('style="font-size: 12px"');
+        art.content.should.not.contain('data-id="10000"');
+        art.content.should.contain('Real Madrid');
+        done();
+      });
+    });
+  });
+
 });
