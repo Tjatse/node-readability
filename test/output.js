@@ -79,4 +79,23 @@ describe('output',function(){
       });
     });
   });
+
+  describe('output as node',function(){
+    it('should behave like cheerio object', function(done){
+      read('<title>read-art</title><body><div><div></div><p><span>hi, dude,</span><br style=""/><span>i am readability, aka read-art...</span></p></div></body>', {
+        output: {
+          type: 'cheerio',
+        }
+      }, function(err, art){
+        var dom;
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        dom = art.content;
+        expect(art.content).to.be.an('object');
+        expect(dom.find('p').length).to.equal(1);
+        expect(dom.find('span').length).to.equal(2);
+        done();
+      });
+    });
+  });
 });

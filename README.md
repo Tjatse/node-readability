@@ -212,7 +212,7 @@ read.use(function(){
 ## Output
 You can wrap the content of article with different types, the `output` option could be:
 - **String**
-  One of `text`, `html` and `json`, `html` by default.
+  One of `text`, `html` `json` and `cheerio`, `html` by default.
 - **Object**
   Key-value pairs including:
   - **type**
