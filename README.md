@@ -62,7 +62,7 @@ read(html/uri [, options], callback)
 It supports the definitions such as:
   * **html/uri** Html or Uri string.
   * **options** An optional options object, including:
-    - **output** The data type of article content, including: `html`, `text` or `json` (head over to [Output](#output) to get more information).
+    - **output** The data type of article content, head over to [Output](#output) to get more information.
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` by default.
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
@@ -210,13 +210,13 @@ read.use(function(){
 
 <a name="output" />
 ## Output
-You can wrap the content of article with different types, the `output` option could be:
+You can wrap the content of article with different types, it supports `text`, `html` `json` and `cheerio`, the `output` option could be:
 - **String**
-  One of `text`, `html` `json` and `cheerio`, `html` by default.
+  One of types, `html` by default.
 - **Object**
   Key-value pairs including:
   - **type**
-    One of `text`, `html` and `json`.
+    One of types.
   - **stripSpaces**
     A value indicates whether strip the tab symbols (\r\n\t) or not, `false` by default.
   - **break**
@@ -294,6 +294,28 @@ The art.content will be an Array such as:
 ```
 
 Util now there are only two types - *img* and *text*, the `src` of `img` element is absolute even if the original is a relative one.
+
+<a name="output_cheerio" />
+### cheerio
+Returns the cheerio node, e.g.:
+```javascript
+read('http://example.com', {
+  output: 'cheerio'
+}, function(err, art){
+  // art.content will be a cheerio node
+  art.content.find('div.what>ul.you>li.need');
+});
+// or
+read('http://example.com', {
+  output: {
+    type: 'cheerio',
+    stripSpaces: true
+  }
+}, function(err, art){
+  // art.content will be a cheerio node
+  art.content.find('div.what>ul.you>li.need');
+});
+```
 
 **Notes** The video sources of the sites are quite different, it's hard to fit all in a common way, I haven't find a good way to solve that, PRs are in demand.
 
