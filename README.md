@@ -65,6 +65,7 @@ It supports the definitions such as:
     - **output** The data type of article content, including: `html`, `text` or `json` (head over to [Output](#output) to get more information).
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` by default.
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
+    - **tidyAttrs** Remove all the attributes on elements, `false` by default.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):

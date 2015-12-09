@@ -1,3 +1,6 @@
+# 2015/10/16
+- Add `tidyAttrs` option.
+
 # 2015/06/03
 - Add response data to callback arguments
 

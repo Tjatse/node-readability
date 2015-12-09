@@ -1,10 +1,10 @@
 {
   "name": "read-art",
-  "version": "0.3.5",
+  "version": "0.3.8",
   "description": "Scrape/Crawl article from any site automatically. Make any web page readable, no matter Chinese or English.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R spec -t 10000"
+    "test": "./node_modules/.bin/mocha -R spec -t 15000"
   },
   "repository": {
     "type": "git",
@@ -30,8 +30,8 @@
   ],
   "dependencies": {
     "cheerio": "~0.19.0",
-    "req-fast": "^0.2.8",
-    "URIjs": "^1.14.0",
+    "req-fast": "^0.2.9",
+    "URIjs": "^1.16.1",
     "entities": "~1.1.1"
   },
   "devDependencies": {

@@ -29,4 +29,19 @@ describe('html passing',function(){
     });
   });
 
+  describe('tidy attributes',function(){
+    it('should have no attributes on element',function(done){
+      read('<title>TIDY!!!!!</title><body><div><p style="font-size: 12px" data-id="10000">Hola!!!! <a href="real_madrid.htm">Real Madrid</a>!!!!!!!!!!!!!!<img src="real_madrid.jpg" /></p></div></body>', {tidyAttrs: true}, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        art.content.should.not.contain('style="font-size: 12px"');
+        art.content.should.not.contain('data-id="10000"');
+        art.content.should.contain('Real Madrid');
+        art.content.should.contain(' href="real_madrid.htm"');
+        art.content.should.contain(' src="real_madrid.jpg"');
+        done();
+      });
+    });
+  });
+
 });
