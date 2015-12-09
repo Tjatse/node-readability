@@ -1,3 +1,6 @@
+# 2015/12/09
+- Supports `cheerio` output type. @entertainyou
+
 # 2015/10/16
 - Add `tidyAttrs` option.
 
