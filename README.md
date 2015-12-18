@@ -14,6 +14,7 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - [Installation](#ins)
 - [Usage](#usage)
 - [Score Rule](#score_rule)
+- [Extract Selectors](#selectors)
 - [Customize Settings](#cus_sets)
 - [Output](#output)
 - [Notes](#notes)
@@ -71,6 +72,7 @@ It supports the definitions such as:
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
+    - **selectors** Customize the data extract [selectors](#selectors).
   * **callback** The callback to run - `callback(error, article, options, response)`, arguments are:
     - **error** `Error` object when exception has been caught.
     - **article** The article object, including: `article.title`, `article.content` and `article.html`.
@@ -149,6 +151,34 @@ read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
 
 });
 ```
+
+<a name="selectors" />
+Some times we wanna extract article somehow, e.g. pick the title of `.article>h3` as title, and pick `.article>.author` as the author data:
+```javascript
+read({
+  html: '<title>read-art</title><body><div class="article"><h3 title="--read-art--">Who Am I</h3><p class="section1">hi, dude, i am <b>readability</b></p><p class="section2">aka read-art...</p><small class="author" data-author="Tjatse X">Tjatse</small></div></body>',
+  selectors: {
+    title: {
+      selector: '.article>h3',
+      extract: ['text', 'title']
+    },
+    content: '.article p.section1',
+    author: {
+      selector: '.article>small.author',
+      extract: {
+        shot_name: 'text',
+        full_name: 'data-author'
+      }
+    }
+  },
+}, function (err, art) {
+  // art.title === {text: 'Who Am I', title: '--read-art--'}
+  // art.content === 'hi, dude, i am <b>readability</b>'
+  // art.author === {shot_name: 'Tjatse', full_name: 'Tjatse X'}
+});
+```
+
+**Notes** The binding data will be an object if the `extract` option is an array object, but `content` depends on the `output` option.  
 
 <a name="cus_sets" />
 ## Customize Settings
