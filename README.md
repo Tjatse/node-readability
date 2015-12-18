@@ -153,7 +153,8 @@ read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
 ```
 
 <a name="selectors" />
-Some times we wanna extract article somehow, e.g. pick the title of `.article>h3` as title, and pick `.article>.author` as the author data:
+## Extract Selectors
+Some times we wanna extract article somehow, e.g.: pick the text of `.article>h3` as title, and pick `.article>.author` as the author data:
 ```javascript
 read({
   html: '<title>read-art</title><body><div class="article"><h3 title="--read-art--">Who Am I</h3><p class="section1">hi, dude, i am <b>readability</b></p><p class="section2">aka read-art...</p><small class="author" data-author="Tjatse X">Tjatse</small></div></body>',
@@ -178,7 +179,7 @@ read({
 });
 ```
 
-**Notes** The binding data will be an object if the `extract` option is an array object, but `content` depends on the `output` option.  
+**Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
 
 <a name="cus_sets" />
 ## Customize Settings
