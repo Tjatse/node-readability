@@ -43,7 +43,8 @@ function read(uri, options, callback){
   }
 
   var parsingData = {
-    html    : uri,
+    uri     : options.uri,
+    html    : options.html,
     options : options,
     callback: callback
   };
