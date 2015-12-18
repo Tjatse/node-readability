@@ -1,3 +1,9 @@
+# 2015/12/18
+- only fetch body when uri is provided but html is empty
+- fix the links of img,a,object,embed... - relative to absolute
+- customize selectors
+- refactor: extract data
+
 # 2015/12/09
 - Supports `cheerio` output type. @entertainyou
 
