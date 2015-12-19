@@ -14,6 +14,7 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - [Installation](#ins)
 - [Usage](#usage)
 - [Score Rule](#score_rule)
+- [Extract Selectors](#selectors)
 - [Customize Settings](#cus_sets)
 - [Output](#output)
 - [Notes](#notes)
@@ -27,25 +28,19 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - Automatic Decoding Content Encodings(Avoid Messy Codes, Especially Chinese)
 - Gzip/Deflate Support
 - Proxy Support
-- Generate User-Agent
+- Auto-generate User-Agent
+- Free and extensible
 
 <a name="perfs" />
 ## Performance
-In my case, the indexed data is about **400 thousand per day**, **10 million per month**, and the maximize indexing speed is **35/second**, the memory cost are limited **under 100 megabytes**.
-
-**Pictures don't lie:**
-
-![image](screenshots/es.jpg)
+In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **700 thousands documents per day**, **22 million per month**, and the maximize indexing speed is **450 per minute**, **avg 80 per minute**, the memory cost are about **200 megabytes** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](#score_rule) or [Selectors](selectors). it's better than any other readability modules.
 
 ![image](screenshots/performance.jpg)
 
-![image](screenshots/mem.jpg)
-
-![image](screenshots/search.jpg)
-
-**Notes**
-- All the spiders are managed by [PM2](https://github.com/Unitech/PM2) (I am currently working on that with friends, very welcome to use this amazing tool).
-- Loose coupling between Spiders, Indexers and Data, they're queued by NSQ.
+> Server infos: 
+> * 20M bandwidth of fibre-optical
+> * 8 Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz cpus
+> 32G memory
 
 <a name="ins" />
 ## Installation
@@ -66,10 +61,12 @@ It supports the definitions such as:
     - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` by default.
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
+    - **dom** Will return the whole cheerio dom when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
+    - **selectors** Customize the data extract [selectors](#selectors).
   * **callback** The callback to run - `callback(error, article, options, response)`, arguments are:
     - **error** `Error` object when exception has been caught.
     - **article** The article object, including: `article.title`, `article.content` and `article.html`.
@@ -148,6 +145,35 @@ read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
 
 });
 ```
+
+<a name="selectors" />
+## Extract Selectors
+Some times we wanna extract article somehow, e.g.: pick the text of `.article>h3` as title, and pick `.article>.author` as the author data:
+```javascript
+read({
+  html: '<title>read-art</title><body><div class="article"><h3 title="--read-art--">Who Am I</h3><p class="section1">hi, dude, i am <b>readability</b></p><p class="section2">aka read-art...</p><small class="author" data-author="Tjatse X">Tjatse</small></div></body>',
+  selectors: {
+    title: {
+      selector: '.article>h3',
+      extract: ['text', 'title']
+    },
+    content: '.article p.section1',
+    author: {
+      selector: '.article>small.author',
+      extract: {
+        shot_name: 'text',
+        full_name: 'data-author'
+      }
+    }
+  },
+}, function (err, art) {
+  // art.title === {text: 'Who Am I', title: '--read-art--'}
+  // art.content === 'hi, dude, i am <b>readability</b>'
+  // art.author === {shot_name: 'Tjatse', full_name: 'Tjatse X'}
+});
+```
+
+**Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
 
 <a name="cus_sets" />
 ## Customize Settings
@@ -356,27 +382,6 @@ read('http://example.com', {
 ```
 npm test
 ```
-
-## Other Library
-### [luin/node-readability](https://github.com/luin/node-readability)
-luin/node-readability is an old Readability that be transformed from **Arc90**, easy to use, but the problem is - TOO SLOW. It was based on `jsdom`, so, the HTML must be written in strict mode, which means you can not make any mistake, e.g.:
-
-```html
-<P>Paragraphs</p>
-<p>My book name is <read-art></p>
-<div><p>Hey, dude!</div>
-```
-
-All above will cause `hiberarchy errors`, more seriously, `jsdom` is a memory killer.
-
-### [bndr/node-read](https://github.com/bndr/node-read)
-I've contributed on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. So I decided to write it on my own.
-
-## TODO
-- [ ] get published time
-- [ ] get author
-- [ ] get source
-- [ ] pagination
 
 ## License
 Licensed under the Apache License, Version 2.0 (the "License");

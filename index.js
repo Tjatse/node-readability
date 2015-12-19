@@ -43,12 +43,13 @@ function read(uri, options, callback){
   }
 
   var parsingData = {
-    html    : uri,
+    uri     : options.uri,
+    html    : options.html,
     options : options,
     callback: callback
   };
   // fetch body or straight convert to article.
-  if (options.uri) {
+  if (options.uri && !options.html) {
     req(options, function(err, resp){
       if (err || !resp) {
         return callback(err || new Error('Response is empty.'));
