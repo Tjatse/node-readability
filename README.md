@@ -28,25 +28,19 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - Automatic Decoding Content Encodings(Avoid Messy Codes, Especially Chinese)
 - Gzip/Deflate Support
 - Proxy Support
-- Generate User-Agent
+- Auto-generate User-Agent
+- Free and extensible
 
 <a name="perfs" />
 ## Performance
-In my case, the indexed data is about **400 thousand per day**, **10 million per month**, and the maximize indexing speed is **35/second**, the memory cost are limited **under 100 megabytes**.
-
-**Pictures don't lie:**
-
-![image](screenshots/es.jpg)
+In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **700 thousands documents per day**, **22 million per month**, and the maximize indexing speed is **450 per minute**, **avg 80 per minute**, the memory cost are about **200 megabytes** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](#score_rule) or [Selectors](selectors). it's better than any other readability modules.
 
 ![image](screenshots/performance.jpg)
 
-![image](screenshots/mem.jpg)
-
-![image](screenshots/search.jpg)
-
-**Notes**
-- All the spiders are managed by [PM2](https://github.com/Unitech/PM2) (I am currently working on that with friends, very welcome to use this amazing tool).
-- Loose coupling between Spiders, Indexers and Data, they're queued by NSQ.
+> Server infos: 
+> * 20M bandwidth of fibre-optical
+> * 8 Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz cpus
+> 32G memory
 
 <a name="ins" />
 ## Installation
@@ -388,27 +382,6 @@ read('http://example.com', {
 ```
 npm test
 ```
-
-## Other Library
-### [luin/node-readability](https://github.com/luin/node-readability)
-luin/node-readability is an old Readability that be transformed from **Arc90**, easy to use, but the problem is - TOO SLOW. It was based on `jsdom`, so, the HTML must be written in strict mode, which means you can not make any mistake, e.g.:
-
-```html
-<P>Paragraphs</p>
-<p>My book name is <read-art></p>
-<div><p>Hey, dude!</div>
-```
-
-All above will cause `hiberarchy errors`, more seriously, `jsdom` is a memory killer.
-
-### [bndr/node-read](https://github.com/bndr/node-read)
-I've contributed on this for a while, but it's hard to communicate with Vadim(we are in a different timezone), and we have very different ideas. So I decided to write it on my own.
-
-## TODO
-- [ ] get published time
-- [ ] get author
-- [ ] get source
-- [ ] pagination
 
 ## License
 Licensed under the Apache License, Version 2.0 (the "License");
