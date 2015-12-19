@@ -33,14 +33,14 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 
 <a name="perfs" />
 ## Performance
-In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **700 thousands documents per day**, **22 million per month**, and the maximize indexing speed is **450 per minute**, **avg 80 per minute**, the memory cost are about **200 megabytes** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](#score_rule) or [Selectors](selectors). it's better than any other readability modules.
+In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **700 thousands documents per day**, **22 million per month**, and the maximize crawling speed is **450 per minute**, **avg 80 per minute**, the memory cost are about **200 megabytes** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](#score_rule) or [Selectors](selectors). it's better than any other readability modules.
 
 ![image](screenshots/performance.jpg)
 
 > Server infos: 
 > * 20M bandwidth of fibre-optical
 > * 8 Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz cpus
-> 32G memory
+> * 32G memory
 
 <a name="ins" />
 ## Installation
@@ -114,7 +114,7 @@ read({
 
 <a name="score_rule" />
 ## Score Rule
-In some situations, we need to customize score rules to grab the correct content of article, such as BBS and QA forums.
+In some situations, we need to customize score rules to crawl the correct content of article, such as BBS and QA forums.
 There are two effective ways to do this:
 - **minTextLength**
   It's useful to get rid of useless elements (`P` / `DIV`), e.g. `minTextLength: 100` will dump all the blocks that `node.text().length` is less than `100`.
@@ -149,6 +149,8 @@ read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
 <a name="selectors" />
 ## Extract Selectors
 Some times we wanna extract article somehow, e.g.: pick the text of `.article>h3` as title, and pick `.article>.author` as the author data:
+
+### Example
 ```javascript
 read({
   html: '<title>read-art</title><body><div class="article"><h3 title="--read-art--">Who Am I</h3><p class="section1">hi, dude, i am <b>readability</b></p><p class="section2">aka read-art...</p><small class="author" data-author="Tjatse X">Tjatse</small></div></body>',
@@ -172,6 +174,10 @@ read({
   // art.author === {shot_name: 'Tjatse', full_name: 'Tjatse X'}
 });
 ```
+
+Properties:
+- **selector** the query selector, e.g.: `#article>.title`, `.articles:nth-child(3)`
+- **extract** the data that you wanna extract, could be `String`, `Array` or `Object`.
 
 **Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
 
