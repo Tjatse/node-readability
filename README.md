@@ -45,7 +45,7 @@ In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **
 <a name="ins" />
 ## Installation
 ```javascript
-npm install read-art
+npm install read-art --production
 ```
 
 <a name="usage" />
