@@ -1,3 +1,6 @@
+# 2015/12/29
+- fix scoreRule on grandparent node
+
 # 2015/12/18
 - only fetch body when uri is provided but html is empty
 - fix the links of img,a,object,embed... - relative to absolute
