@@ -1,6 +1,6 @@
 {
   "name": "read-art",
-  "version": "0.4.3",
+  "version": "0.4.3-rc1",
   "description": "Scrape/Crawl article from any site automatically. Make any web page readable, no matter Chinese or English.",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "cheerio": "~0.19.0",
-    "req-fast": "^0.2.9",
+    "req-fast": "^0.2.10",
     "urijs": "~1.17.0",
     "entities": "~1.1.1"
   },
