@@ -62,6 +62,7 @@ It supports the definitions such as:
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
     - **dom** Will return the whole cheerio dom when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function.
+    - **damping** The damping to calculate score of parent node, `1/2` by default. e.g.: the score of current document node is `20`, the score of parent will be `20 * damping`.
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
