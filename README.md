@@ -68,7 +68,10 @@ It supports the definitions such as:
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
     - **selectors** Customize the data extract [selectors](#selectors).
-    - **imgFallback** Fallback to image's data-src attribute when src attribute is not set.
+    - **imgFallback** Can be boolean/function/string.
+      - boolean fallback to data-src attribute
+      - string fallback to supplied attribtue
+      - function receive the node cheerio object, return the fallback attribute
   * **callback** The callback to run - `callback(error, article, options, response)`, arguments are:
     - **error** `Error` object when exception has been caught.
     - **article** The article object, including: `article.title`, `article.content` and `article.html`.
