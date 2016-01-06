@@ -1,3 +1,6 @@
+# 2015/01/06
+- `imgFallback` option @entertainyou
+
 # 2015/12/29
 - fix scoreRule on grandparent node
 

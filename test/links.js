@@ -38,12 +38,12 @@ describe('fix links',function(){
         it('fallback to relative data-src if imgFallback option is true',function(done){
           read({
             uri: 'http://github.com/Tjatse',
-            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/Tjatse/foo.png" />, aka read-art...</p></div></body>',
-            imgFallback: true,
+            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/path/to/foo.png" />, aka read-art...</p></div></body>',
+            imgFallback: true
           }, function(err, art){
             should.not.exist(err);
             expect(art).to.be.an('object');
-            art.content.should.contain(' src="http://github.com/Tjatse/foo.png"');
+            art.content.should.contain(' src="http://github.com/path/to/foo.png"');
             art.title.should.equal('read-art');
             done();
           });
@@ -51,27 +51,28 @@ describe('fix links',function(){
 
         it('fallback to absolute data-src if imgFallback option is true',function(done){
           read({
-            uri: 'http://github.com/Tjatse',
-            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="http://github.com/Tjatse/foo.png" />, aka read-art...</p></div></body>',
-            imgFallback: true,
+            uri: 'http://example.com/',
+            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="http://github.com/path/to/foo.png" />, aka read-art...</p></div></body>',
+            imgFallback: true
           }, function(err, art){
             should.not.exist(err);
             expect(art).to.be.an('object');
-            art.content.should.contain(' src="http://github.com/Tjatse/foo.png"');
+            art.content.should.contain(' src="http://github.com/path/to/foo.png"');
             art.title.should.equal('read-art');
             done();
           });
         });
 
-        it('not fallback to data-src if imgFallback option is true',function(done){
+        it('not fallback to data-src if imgFallback option is true and src exists',function(done){
           read({
             uri: 'http://github.com/Tjatse',
-            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/Tjatse/foo.png" src="/Tjatse/bar.png" />, aka read-art...</p></div></body>',
-            imgFallback: true,
+            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/path/to/foo.png" src="/path/to/bar.png" />, aka read-art...</p></div></body>',
+            imgFallback: true
           }, function(err, art){
             should.not.exist(err);
             expect(art).to.be.an('object');
-            art.content.should.contain(' src="http://github.com/Tjatse/bar.png"');
+            art.content.should.contain(' src="http://github.com/path/to/bar.png"');
+            art.content.should.not.contain(' src="http://github.com/path/to/foo.png"');
             art.title.should.equal('read-art');
             done();
           });
@@ -79,11 +80,11 @@ describe('fix links',function(){
       });
 
       describe('false', function() {
-        it('not fallback to data-src if imgFallback option is false',function(done){
+        it('remove node if fallback does not work and neither src',function(done){
           read({
             uri: 'http://github.com/Tjatse',
-            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/Tjatse/foo.png" />, aka read-art...</p></div></body>',
-            imgFallback: false,
+            html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/path/to/foo.png" />, aka read-art...</p></div></body>',
+            imgFallback: false
           }, function(err, art){
             should.not.exist(err);
             expect(art).to.be.an('object');
@@ -96,15 +97,55 @@ describe('fix links',function(){
     });
 
     describe('as string', function() {
-      it('fallback to imgFallback attr',function(done){
+      it('fallback to imgFallback attr (data-*)',function(done){
         read({
           uri: 'http://github.com/Tjatse',
-          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-foo="/Tjatse/foo.png" />, aka read-art...</p></div></body>',
-          imgFallback: 'data-foo',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-foo="/path/to/foo.png" />, aka read-art...</p></div></body>',
+          imgFallback: 'data-foo'
         }, function(err, art){
           should.not.exist(err);
           expect(art).to.be.an('object');
-          art.content.should.contain(' src="http://github.com/Tjatse/foo.png"');
+          art.content.should.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('fallback to imgFallback attr !(data-*)',function(done){
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img foo-bar="/path/to/foo.png" />, aka read-art...</p></div></body>',
+          imgFallback: 'foo-bar'
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('not fallback to imgFallback attr if src exists',function(done){
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img foo-bar="/path/to/foo.png" src="/path/to/bar.png" />, aka read-art...</p></div></body>',
+          imgFallback: 'foo-bar'
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.contain(' src="http://github.com/path/to/bar.png"');
+          art.content.should.not.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('remove node if fallback does not work and neither src',function(done){
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/path/to/foo.png" />, aka read-art...</p></div></body>',
+          imgFallback: 'data-src1'
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.not.contain('<img');
           art.title.should.equal('read-art');
           done();
         });
@@ -114,15 +155,80 @@ describe('fix links',function(){
       it('fallback to imgFallback result attr', function(done) {
         read({
           uri: 'http://github.com/Tjatse',
-          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-img="/Tjatse/foo.png" />, aka read-art...</p></div></body>',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-image-dir="/path/to/" thumbnail="foo.png" />, aka read-art...</p></div></body>',
           imgFallback: function (node) {
             arguments.should.have.length(1);
-            return 'data-' + node.get(0).name;
+            return node.data('image-dir') + node.attr('thumbnail');
+          }
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('fallback to imgFallback result attr', function(done) {
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-image-dir="/path/to/" thumbnail="foo.png" />, aka read-art...</p></div></body>',
+          imgFallback: function (node) {
+            arguments.should.have.length(1);
+            return node.data('image-dir') + node.attr('thumbnail');
+          }
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('not fallback to imgFallback result attr if src exists', function(done) {
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-image-dir="/path/to/" thumbnail="foo.png" src="/path/to/bar.png" />, aka read-art...</p></div></body>',
+          imgFallback: function (node) {
+            arguments.should.have.length(1);
+            return node.data('image-dir') + node.attr('thumbnail');
           },
         }, function(err, art){
           should.not.exist(err);
           expect(art).to.be.an('object');
-          art.content.should.contain(' src="http://github.com/Tjatse/foo.png"');
+          art.content.should.contain(' src="http://github.com/path/to/bar.png"');
+          art.content.should.not.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('fallback to imgFallback result attr if src exists', function(done) {
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-image-dir="/path/to/" thumbnail="foo.png" src="/path/to/bar.png" />, aka read-art...</p></div></body>',
+          imgFallback: function (node) {
+            arguments.should.have.length(1);
+            return node.data('image-dir') + node.attr('thumbnail');
+          }
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.contain(' src="http://github.com/path/to/bar.png"');
+          art.content.should.not.contain(' src="http://github.com/path/to/foo.png"');
+          art.title.should.equal('read-art');
+          done();
+        });
+      });
+      it('remove node if fallback does not work and neither src',function(done){
+        read({
+          uri: 'http://github.com/Tjatse',
+          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-src="/path/to/foo.png" />, aka read-art...</p></div></body>',
+          imgFallback: function (node) {
+            arguments.should.have.length(1);
+          }
+        }, function(err, art){
+          should.not.exist(err);
+          expect(art).to.be.an('object');
+          art.content.should.not.contain('<img');
           art.title.should.equal('read-art');
           done();
         });

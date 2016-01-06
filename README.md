@@ -68,10 +68,16 @@ It supports the definitions such as:
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
       - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
     - **selectors** Customize the data extract [selectors](#selectors).
-    - **imgFallback** Can be boolean/function/string.
-      - boolean fallback to data-src attribute
-      - string fallback to supplied attribtue
-      - function receive the node cheerio object, return the fallback attribute
+    - **imgFallback** Customize the way to get source of image, should be one of following types.
+      - *Boolean* Fallback to `img.src = (node.data('src') || node.attr('data-src'))` when set to `true`.
+      - *String* Customize the attribute name, it will take `node.attr([imgFallback])` as `src` of `img`.
+      - *Function* Give users maximum customizability and scalability of source attribute on `img`, e.g.:
+
+        ```javascript
+        imgFallback: function(node){
+          return node.attr('base') + '/' + node.attr('rel-path');
+        }
+        ```
   * **callback** The callback to run - `callback(error, article, options, response)`, arguments are:
     - **error** `Error` object when exception has been caught.
     - **article** The article object, including: `article.title`, `article.content` and `article.html`.
