@@ -28,12 +28,20 @@ function read(uri, options, callback){
     options = uri;
     uri = options.uri || options.html;
   }
+
   options = util._extend({
-    killBreaks   : true,
+    killBreaks: true,
     lowerCaseTags: true,
-    output       : 'html',
-    minTextLength: 25
+    output: 'html',
+    minTextLength: 25,
+    thresholdLinkDensity: 0.25
   }, options);
+
+  var density = options.thresholdLinkDensity;
+  if (!isFinite(density) || (density > 1 || density < 0)) {
+    density = 0.25;
+  }
+  options.thresholdLinkDensity = density;
 
   // indicating uri is html or url.
   var isHTML = uri.match(/^\s*</);

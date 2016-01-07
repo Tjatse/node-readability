@@ -15,6 +15,8 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - [Usage](#usage)
 - [Score Rule](#score_rule)
 - [Extract Selectors](#selectors)
+- [Image Fallback](#imgfallback)
+- [Threshold](#threshold)
 - [Customize Settings](#cus_sets)
 - [Output](#output)
 - [Notes](#notes)
@@ -58,27 +60,19 @@ It supports the definitions such as:
   * **html/uri** Html or Uri string.
   * **options** An optional options object, including:
     - **output** The data type of article content, head over to [Output](#output) to get more information.
-    - **killBreaks** A value indicating whether kill breaks, blanks, tab symbols(\r\t\n) into one `<br />` or not, `true` by default.
+    - **killBreaks** A value indicating whether or not kill breaks, blanks, tab symbols(\r\t\n) into one `<br />`, `true` by default.
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
     - **dom** Will return the whole cheerio dom when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function.
     - **damping** The damping to calculate score of parent node, `1/2` by default. e.g.: the score of current document node is `20`, the score of parent will be `20 * damping`.
+    - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function, [read more](#score_rule).
+    - **selectors** Customize the data extract [selectors](#selectors).
+    - **imgFallback** Customize the way to get source of image, [read more](#imgfallback).
+    - **thresholdScore** A number/function indicates whether or not drop the article content, [read more](#threshold_score).
+    - **thresholdLinkDensity** A `0~1` decimal indicates whether or not drop the article content, [read more](#threshold_linkdensity).
     - **options from [cheerio](https://github.com/cheeriojs/cheerio)**
     - **options from [req-fast](https://github.com/Tjatse/req-fast)**
-    - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function (head over to [Score Rule](#score_rule) to get more information):
-      - **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
-    - **selectors** Customize the data extract [selectors](#selectors).
-    - **imgFallback** Customize the way to get source of image, should be one of following types.
-      - *Boolean* Fallback to `img.src = (node.data('src') || node.attr('data-src'))` when set to `true`.
-      - *String* Customize the attribute name, it will take `node.attr([imgFallback])` as `src` of `img`.
-      - *Function* Give users maximum customizability and scalability of source attribute on `img`, e.g.:
-
-        ```javascript
-        imgFallback: function(node){
-          return node.attr('base') + '/' + node.attr('rel-path');
-        }
-        ```
-  * **callback** The callback to run - `callback(error, article, options, response)`, arguments are:
+  * **callback** Fire after the article has been crawled - `callback(error, article, options, response)`, arguments are:
     - **error** `Error` object when exception has been caught.
     - **article** The article object, including: `article.title`, `article.content` and `article.html`.
     - **options** The request options.
@@ -142,7 +136,8 @@ There are two effective ways to do this:
 
   The elements which have the `w740` className will get `100` bonus points, that will make the `node` to be the *topCandidate*, which means it's enough to make the `text` of `DIV/P.w740` to be the content of current article.
 
-<a name="score_rule_eg" />
+  **node** The [cheerio object](https://github.com/cheeriojs/cheerio#selectors).
+
 ### Example
 ```javascript
 read('http://club.autohome.com.cn/bbs/thread-c-66-37239726-1.html', {
@@ -191,6 +186,76 @@ Properties:
 - **extract** the data that you wanna extract, could be `String`, `Array` or `Object`.
 
 **Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
+
+<a name="imgfallback" />
+## Image Fallback
+Should be one of following types:
+- **Boolean** Fallback to `img.src = (node.data('src') || node.attr('data-src'))` when set to `true`.
+- **String** Customize the attribute name, it will take `node.attr([imgFallback])` as `src` of `img`.
+- **Function** Give users maximum customizability and scalability of source attribute on `img`, e.g.:
+
+  ```javascript
+  imgFallback: function(node){
+    return node.attr('base') + '/' + node.attr('rel-path');
+  }
+        ```
+
+### Example
+```javascript
+read({
+  imgFallback: true
+}, function(err, art){});
+
+read({
+  imgFallback: 'the-src-attr'
+}, function(err, art){});
+
+read({
+  imgFallback: function(node){
+    return 'http://img-serv/' + node.attr('relative-path');
+  }
+}, function(err, art){});
+```
+
+<a name="threshold" />
+## Threshold
+Customize the threshold of anchors and nodes' scores.
+
+<a name="threshold_score" />
+### Score
+The `thresholdScore` is a threshold number which to identify whether or not to discard children of top candidate directly (skip deeper tag/text/link density checking), should be one of following types:
+- **Number** A finite number.
+- **Function** Calculate the threshold score by yourself, two arguments are passing in:
+  - *node* The top candidate (mostly like article dom).
+  - *scoreKey* The data key to storage score, you can get score by `node.data(scoreKey)`.
+
+After `read-art` got the top candidate, it starts to analyze the children of top candidate, if the score of current child is greater than `thresholdScore`, the child will be appended to article body directly.
+
+`Math.max(10, topCandidate.data(scoreKey) * 0.2)` by default.
+
+#### Example
+```javascript
+read({
+  thresholdScore: 20
+}, function(err, art){});
+
+read({
+  thresholdScore: function(node, scoreKey){
+    return Math.max(10, node.data(scoreKey) * 0.2);
+  }
+}, function(err, art){});
+```
+
+<a name="threshold_linkdensity" />
+### Link Density
+`thresholdLinkDensity` is used to identify whether current child of top candidate is a `navigator`, `ad` or `relative-list`, `0.25` by default, so if the text length of anchors in current child devides by text length of top candidate is greater than `thresholdLinkDensity`, the child will be discarded.
+
+#### Example
+```javascript
+read({
+  thresholdLinkDensity: 0.25
+}, function(err, art){});
+```
 
 <a name="cus_sets" />
 ## Customize Settings
@@ -241,7 +306,6 @@ The `[usage]` could be one of following:
   /<(a|blockquote|dl|div|img|ol|p|pre|table|ul|span|label)/i
   ```
 
-<a name="cus_sets_eg" />
 ### Example
 ```javascript
 read.use(function(){
@@ -261,11 +325,10 @@ You can wrap the content of article with different types, it supports `text`, `h
   - **type**
     One of types.
   - **stripSpaces**
-    A value indicates whether strip the tab symbols (\r\n\t) or not, `false` by default.
+    A value indicates whether or not strip the tab symbols (\r\n\t), `false` by default.
   - **break**
-    A value indicates whether split content into paragraphs by `<br />` (Only affects JSON output).
+    A value indicates whether or not split content into paragraphs by `<br />` (Only affects JSON output).
 
-<a name="output_text" />
 ### text
 Returns the inner text, e.g.:
 ```javascript
@@ -285,7 +348,6 @@ read('http://example.com', {
 });
 ```
 
-<a name="output_html" />
 ### html
 Returns the inner HTML, e.g.:
 ```javascript
@@ -307,7 +369,6 @@ read('http://example.com', {
 
 **Notes** Videos could be scraped now, the domains currently are supported: *youtube|vimeo|youku|tudou|56|letv|iqiyi|sohu|sina|163*.
 
-<a name="output_json" />
 ### json
 Returns the restful result, e.g.:
 ```javascript
@@ -338,7 +399,6 @@ The art.content will be an Array such as:
 
 Util now there are only two types - *img* and *text*, the `src` of `img` element is absolute even if the original is a relative one.
 
-<a name="output_cheerio" />
 ### cheerio
 Returns the cheerio node, e.g.:
 ```javascript
