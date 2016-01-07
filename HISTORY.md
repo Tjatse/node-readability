@@ -1,4 +1,8 @@
-# 2015/01/06
+# 2016/01/07
+- feature: threshold
+- fixed: #5 #10
+
+# 2016/01/06
 - `imgFallback` option @entertainyou
 
 # 2015/12/29
