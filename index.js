@@ -34,7 +34,8 @@ function read(uri, options, callback){
     lowerCaseTags: true,
     output: 'html',
     minTextLength: 25,
-    thresholdLinkDensity: 0.25
+    thresholdLinkDensity: 0.25,
+    minParagraphs: 3
   }, options);
 
   var density = options.thresholdLinkDensity;
@@ -42,6 +43,10 @@ function read(uri, options, callback){
     density = 0.25;
   }
   options.thresholdLinkDensity = density;
+
+  if (!isFinite(options.minParagraphs)) {
+    options.minParagraphs = 3;
+  }
 
   // indicating uri is html or url.
   var isHTML = uri.match(/^\s*</);

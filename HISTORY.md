@@ -1,3 +1,7 @@
+# 2016/01/14
+- `minParagraphs` option.
+- Make images regexp extendable. #14@entertainyou
+
 # 2016/01/07
 - feature: threshold
 - fixed: #5 #10

@@ -62,6 +62,7 @@ It supports the definitions such as:
     - **output** The data type of article content, head over to [Output](#output) to get more information.
     - **killBreaks** A value indicating whether or not kill breaks, blanks, tab symbols(\r\t\n) into one `<br />`, `true` by default.
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
+    - **minParagraphs** A number indicates whether or not take the top candidate as a article candidate, `3` by default, i.e.: If `topCandidate` dom has more than `3` `<p>` children, `topCandidate` will be considered as the article dom, otherwise, it will be the parent of `topCandidate` (not `<body>`).
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
     - **dom** Will return the whole cheerio dom when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function.
     - **damping** The damping to calculate score of parent node, `1/2` by default. e.g.: the score of current document node is `20`, the score of parent will be `20 * damping`.
