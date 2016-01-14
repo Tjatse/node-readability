@@ -307,6 +307,9 @@ The `[usage]` could be one of following:
   /<(a|blockquote|dl|div|img|ol|p|pre|table|ul|span|label)/i
   ```
 
+- `this.regexps.images([re], [override])`
+  If `images` regexp test `src` attribute of node success, it will be picked as a normal `img`, otherwise will be dropped. `[re]` is a regexp, e.g. `/\.(gif|jpe?g|png)$/i` will match the `image` that `src` likes `/path/to/foo.jpg`, if `[override]` is set to `true`, `readart.regexps.images` will be replaced by `[re]`, otherwise it will be appended to the origin.
+
 ### Example
 ```javascript
 read.use(function(){
