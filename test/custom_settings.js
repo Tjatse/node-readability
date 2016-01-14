@@ -251,5 +251,31 @@ describe('custom settings', function(){
         done();
       });
     });
+
+    it('regexps.images', function(done){
+
+      var article = '<title>title</title>' +
+          '<body>' +
+          '<p>Text hello <img src="image" /> world</p>' +
+          '</body>';
+
+      read.use(function(){
+        this.regexps.images(/.*/, true);
+      });
+      read({
+        html: article,
+        uri: 'http://github.com',
+        output: 'html',
+      }, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        art.content.should.contain('<img src="http://github.com/image">');
+
+        read.use(function(){
+          this.reset()
+        });
+        done();
+      });
+    });
   });
 });
