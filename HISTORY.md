@@ -1,3 +1,6 @@
+# 2016/01/18
+- `forceDecode` option, let `cheerio`/`htmlparser2` handle the encodings now. 
+
 # 2016/01/14
 - `minParagraphs` option.
 - Make images regexp extendable. #14@entertainyou

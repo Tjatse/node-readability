@@ -124,4 +124,37 @@ describe('minParagraphs option', function () {
       });
     });
   });
+
+  describe('forceDecode',function(){
+    it('false, by cheerio',function(done){
+      var article = '<title>title</title>' +
+          '<body>' +
+          '<p foo="&quot; width=1000 onclick=alert(10) test"> HELLO WORLD</p>' +
+          '</body>';
+
+      read({
+        html: article
+      }, function(err, art){
+        should.not.exist(err);
+        art.content.should.contain('&quot')
+        done();
+      });
+    });
+
+    it('true, by entities',function(done){
+      var article = '<title>title</title>' +
+          '<body>' +
+          '<p foo="&quot; width=1000 onclick=alert(10) test"> HELLO WORLD</p>' +
+          '</body>';
+
+      read({
+        html: article,
+        forceDecode: true
+      }, function(err, art){
+        should.not.exist(err);
+        art.content.should.not.contain('&quot')
+        done();
+      });
+    });
+  });
 });
