@@ -64,7 +64,7 @@ It supports the definitions such as:
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **minParagraphs** A number indicates whether or not take the top candidate as a article candidate, `3` by default, i.e.: If `topCandidate` dom has more than `3` `<p>` children, `topCandidate` will be considered as the article dom, otherwise, it will be the parent of `topCandidate` (not `<body>`).
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
-    - **forceDecode** A value indicate whether or not decode the full text/html by (entities)[https://github.com/fb55/entities].
+    - **forceDecode** A value indicate whether or not decode the full text/html by (entities)[https://github.com/fb55/entities], `false` by default.
     - **dom** Will return the whole cheerio dom when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function.
     - **damping** The damping to calculate score of parent node, `1/2` by default. e.g.: the score of current document node is `20`, the score of parent will be `20 * damping`.
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function, [read more](#score_rule).
