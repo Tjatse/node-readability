@@ -194,10 +194,10 @@ Properties:
 Should be one of following types:
 - **Boolean** Fallback to `img.src = (node.data('src') || node.attr('data-src'))` when set to `true`.
 - **String** Customize the attribute name, it will take `node.attr([imgFallback])` as `src` of `img`.
-- **Function** Give users maximum customizability and scalability of source attribute on `img`, e.g.:
+- **Function** Give users maximum customizability and scalability of source attribute on `img`, you can even override the src. e.g.:
 
   ```javascript
-  imgFallback: function(node){
+  imgFallback: function(node, src){
     return node.attr('base') + '/' + node.attr('rel-path');
   }
         ```
