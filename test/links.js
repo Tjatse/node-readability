@@ -30,6 +30,21 @@ describe('fix links',function(){
         done();
       });
     });
+
+    it('if using selectors', function(done){
+      read({
+        uri: 'http://github.com/Tjatse',
+        html: '<title>read-art</title><body><div><p>hi, dude, i am <a href="/Tjatse/read-art.git">readability</a>, aka read-art...</p></div></body>',
+        selectors: { content: 'div' },
+      }, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        console.log('ART', art.content);
+        art.content.should.contain('<a href="http://github.com/Tjatse/read-art.git">');
+        art.title.should.equal('read-art');
+        done();
+      });
+    });
   });
 
   describe('image fallback option',function(){
@@ -218,26 +233,6 @@ describe('fix links',function(){
           done();
         });
       });
-      it('fallback to imgFallback result attr if src exists when use selectors', function(done) {
-        read({
-          uri: 'http://github.com/Tjatse',
-          selectors: {
-            content: 'div',
-          },
-          html: '<title>read-art</title><body><div><p>hi, dude, i am <img data-image-dir="/path/to/" thumbnail="foo.png" src="/path/to/bar.png" />, aka read-art...</p></div></body>',
-          imgFallback: function (node, src) {
-            arguments.should.have.length(2);
-            return node.data('image-dir') + node.attr('thumbnail');
-          }
-        }, function(err, art){
-          should.not.exist(err);
-          expect(art).to.be.an('object');
-          art.content.should.contain(' src="http://github.com/path/to/foo.png"');
-          art.content.should.not.contain(' src="http://github.com/path/to/bar.png"');
-          art.title.should.equal('read-art');
-          done();
-        });
-      });
       it('remove node if fallback does not work and neither src',function(done){
         read({
           uri: 'http://github.com/Tjatse',
@@ -255,4 +250,5 @@ describe('fix links',function(){
       });
     });
   });
+
 });
