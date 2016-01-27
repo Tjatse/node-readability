@@ -30,4 +30,14 @@ describe('medias',function(){
     });
   });
 
+  describe('tianya',function(){
+    it('should have images',function(done){
+      read('http://bbs.tianya.cn/post-funinfo-6769454-1.shtml', function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        expect(art.content).to.contain('<img');
+        done();
+      });
+    });
+  });
 });
