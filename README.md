@@ -198,6 +198,9 @@ Should be one of following types:
 
   ```javascript
   imgFallback: function(node, src){
+    if (src){
+      return src;
+    }
     return node.attr('base') + '/' + node.attr('rel-path');
   }
         ```
@@ -213,8 +216,11 @@ read({
 }, function(err, art){});
 
 read({
-  imgFallback: function(node){
-    return 'http://img-serv/' + node.attr('relative-path');
+  imgFallback: function(node, src){
+    if (src){
+      return src;
+    }
+    return node.attr('base') + '/' + node.attr('rel-path');
   }
 }, function(err, art){});
 ```
