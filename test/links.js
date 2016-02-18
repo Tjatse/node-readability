@@ -30,6 +30,21 @@ describe('fix links',function(){
         done();
       });
     });
+
+    it('if using selectors', function(done){
+      read({
+        uri: 'http://github.com/Tjatse',
+        html: '<title>read-art</title><body><div><p>hi, dude, i am <a href="/Tjatse/read-art.git">readability</a>, aka read-art...</p></div></body>',
+        selectors: { content: 'div' },
+      }, function(err, art){
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        console.log('ART', art.content);
+        art.content.should.contain('<a href="http://github.com/Tjatse/read-art.git">');
+        art.title.should.equal('read-art');
+        done();
+      });
+    });
   });
 
   describe('image fallback option',function(){
