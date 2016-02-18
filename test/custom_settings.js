@@ -12,6 +12,7 @@ describe('custom settings', function () {
       '<div class="dv1"><p class="p1">hi, dude, I am readability (<b>aka read-art</b>)<foot>foot</foot></p></div>' +
       '<div class="dv2"><div class="p2">hey, dude, I am readability too</div></div>' +
       '<div class="dv3"><foo>hello</foo>, dude, I am readability too.</div>' +
+      '<voice content="La~La~"></voice>' + 
       '</div>' +
       '</body>';
   });
@@ -68,7 +69,35 @@ describe('custom settings', function () {
       });
     });
   });
+  describe('medias', function () {
+    it('skip <voice>', function (done) {
+      read(html, {
+        output: 'html'
+      }, function (err, art) {
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        art.content.should.not.contain('La~');
+        done();
+      });
+    });
+    it('has <voice>', function (done) {
+      read.use(function () {
+        this.medias('voice');
+      });
+      read(html, {
+        output: 'html'
+      }, function (err, art) {
+        should.not.exist(err);
+        expect(art).to.be.an('object');
+        art.content.should.contain('La~');
 
+        read.use(function () {
+          this.reset()
+        });
+        done();
+      });
+    });
+  });
   describe('regexps', function () {
     describe('append', function () {
       it('positive', function (done) {
@@ -263,7 +292,6 @@ describe('custom settings', function () {
     });
 
     it('regexps.images', function(done){
-
       var article = '<title>title</title>' +
           '<body>' +
           '<p>Text hello <img src="image" /> world</p>' +

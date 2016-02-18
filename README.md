@@ -283,7 +283,11 @@ The `[usage]` could be one of following:
   ```
   aside,footer,label,nav,noscript,script,link,meta,style,select,textarea,iframe,b,span
   ```
-
+- `this.medias([medias], [override])`
+  Append the medias dom to article by tagName, e.g. `this.medias('video,img,embed')`, if `[override]` is set to `true`, `medias` will be `"video,img,embed"`, otherwise it will be appended to the origin - the original tags are:
+  ```
+  img,video,object,embed
+  ```
 - `this.regexps.positive([re], [override])`
   If `positive` regexp test `id` + `className` of node success, it will be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `positive` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. :
   ```
