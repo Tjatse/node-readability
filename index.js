@@ -35,7 +35,8 @@ function read(uri, options, callback){
     output: 'html',
     minTextLength: 25,
     thresholdLinkDensity: 0.25,
-    minParagraphs: 3
+    minParagraphs: 3,
+    scoreImg: false,
   }, options);
 
   var density = options.thresholdLinkDensity;
