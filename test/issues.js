@@ -32,4 +32,24 @@ describe('Issues on Github',function(){
       });
     });
   });
+
+  describe('@entertainyou',function(){
+    it('should handle pages with images as article',function(done){
+      read({
+        uri: 'http://mp.weixin.qq.com/s?__biz=MjYyMzc1Mjk4MA==&mid=400815255&idx=1&sn=d91b630394b8ba70209406bbf44b41e8&scene=0#wechat_redirect',
+        // by pass the img regexp check.
+        imgFallback: function(node) {
+          return node.data('src') + '.jpg';
+        },
+        scoreImg: true,
+      }, function(err, art){
+        should.not.exist(err);
+        var content = art.content;
+        // somewhat weak validation
+        expect(content).to.contain('data-ratio');
+        expect(content).to.contain('data-src');
+        done();
+      });
+    });
+  });
 });
