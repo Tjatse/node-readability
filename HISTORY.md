@@ -1,3 +1,7 @@
+# 2016/02/22
+- `betterTitle` option
+- #18 #20 #21 #27 #28
+
 # 2016/01/18
 - `forceDecode` option, let `cheerio`/`htmlparser2` handle the encodings now. 
 
