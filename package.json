@@ -30,9 +30,10 @@
   ],
   "dependencies": {
     "cheerio": "~0.19.0",
+    "debug": "^2.2.0",
+    "entities": "~1.1.1",
     "req-fast": "^0.2.14",
-    "urijs": "~1.17.0",
-    "entities": "~1.1.1"
+    "urijs": "~1.17.0"
   },
   "devDependencies": {
     "mocha": "1.21.4",
