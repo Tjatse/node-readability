@@ -61,6 +61,7 @@ It supports the definitions such as:
   * **options** An optional options object, including:
     - **output** The data type of article content, head over to [Output](#output) to get more information.
     - **killBreaks** A value indicating whether or not kill breaks, blanks, tab symbols(\r\t\n) into one `<br />`, `true` by default.
+    - **betterTitle** Defined how to extract the title, [read more](#better_title).
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **minParagraphs** A number indicates whether or not take the top candidate as a article candidate, `3` by default, i.e.: If `topCandidate` dom has more than `3` `<p>` children, `topCandidate` will be considered as the article dom, otherwise, it will be the parent of `topCandidate` (not `<body>`).
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
@@ -118,6 +119,12 @@ read({
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
 **With High Availability: [spider2](https://github.com/Tjatse/spider2)**
+
+<a name="better_title" />
+## Better Title
+The `betterTitle` option could be one type of following:
+- **Number** The maximize length of title.
+- **Function** Customize the title by `betterTitle: function(title){}`, the whole title will be passed in.
 
 <a name="score_rule" />
 ## Score Rule
