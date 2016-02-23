@@ -210,7 +210,7 @@ Should be one of following types:
     }
     return node.attr('base') + '/' + node.attr('rel-path');
   }
-        ```
+  ```
 
 ### Example
 ```javascript
