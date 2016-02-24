@@ -4,7 +4,7 @@
   "description": "Scrape/Crawl article from any site automatically. Make any web page readable, no matter Chinese or English.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R spec -t 15000"
+    "test": "standard && ./node_modules/.bin/mocha -R spec -t 15000"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "readability"
   ],
   "author": "Tjatse",
-  "license": "Apache, Version 2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Tjatse/read-art/issues"
   },
@@ -32,11 +32,17 @@
     "cheerio": "~0.20.0",
     "entities": "~1.1.1",
     "req-fast": "^0.2.14",
-    "urijs": "~1.17.0"
+    "urijs": "~1.17.0",
+    "debug": "~2.2.0"
   },
   "devDependencies": {
     "mocha": "2.4.5",
-    "chai": "3.5.0"
+    "chai": "3.5.0",
+    "standard": "^3.0.0"
+  },
+  "standard": {
+    "ignore": [],
+    "globals": ["describe", "it", "before", "after"]
   },
   "readmeFilename": "README.md"
 }

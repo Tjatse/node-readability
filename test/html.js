@@ -1,47 +1,45 @@
-var read = require('../'),
-  chai = require('chai'),
-  expect = chai.expect,
-  should = chai.should();
+var read = require('../')
+var chai = require('chai')
+var expect = chai.expect
+var should = chai.should()
 
-describe('html passing',function(){
+describe('html passing', function () {
+  describe('instead of uri(English)', function () {
+    it('should have title & body', function (done) {
+      read('<title>read-art</title><body><div><p>hi, dude, i am readability, aka read-art...</p></div></body>', function (err, art) {
+        should.not.exist(err)
+        expect(art).to.be.an('object')
+        art.content.should.contain('hi, dude, i am readability, aka read-art...')
+        art.title.should.equal('read-art')
+        done()
+      })
+    })
+  })
 
-  describe('instead of uri(English)',function(){
-    it('should have title & body',function(done){
-      read('<title>read-art</title><body><div><p>hi, dude, i am readability, aka read-art...</p></div></body>', function(err, art){
-        should.not.exist(err);
-        expect(art).to.be.an('object');
-        art.content.should.contain('hi, dude, i am readability, aka read-art...');
-        art.title.should.equal('read-art');
-        done();
-      });
-    });
-  });
+  describe('instead of uri(Chinese)', function () {
+    it('should have title & body', function (done) {
+      read('<title>文章抓取</title><body><div><p>你好，很高兴认识你，我是正文，字数一定要凑到25个以上哦，不然被抛弃了。。</p></div></body>', function (err, art) {
+        should.not.exist(err)
+        expect(art).to.be.an('object')
+        art.content.should.contain('你好，很高兴认识你，我是正文')
+        art.title.should.equal('文章抓取')
+        done()
+      })
+    })
+  })
 
-  describe('instead of uri(Chinese)',function(){
-    it('should have title & body',function(done){
-      read('<title>文章抓取</title><body><div><p>你好，很高兴认识你，我是正文，字数一定要凑到25个以上哦，不然被抛弃了。。</p></div></body>', function(err, art){
-        should.not.exist(err);
-        expect(art).to.be.an('object');
-        art.content.should.contain('你好，很高兴认识你，我是正文');
-        art.title.should.equal('文章抓取');
-        done();
-      });
-    });
-  });
-
-  describe('tidy attributes',function(){
-    it('should have no attributes on element',function(done){
-      read('<title>TIDY!!!!!</title><body><div><p style="font-size: 12px" data-id="10000">Hola!!!! <a href="real_madrid.htm">Real Madrid</a>!!!!!!!!!!!!!!<img src="real_madrid.jpg" /></p></div></body>', {tidyAttrs: true}, function(err, art){
-        should.not.exist(err);
-        expect(art).to.be.an('object');
-        art.content.should.not.contain('style="font-size: 12px"');
-        art.content.should.not.contain('data-id="10000"');
-        art.content.should.contain('Real Madrid');
-        art.content.should.contain(' href="real_madrid.htm"');
-        art.content.should.contain(' src="real_madrid.jpg"');
-        done();
-      });
-    });
-  });
-
-});
+  describe('tidy attributes', function () {
+    it('should have no attributes on element', function (done) {
+      read('<title>TIDY!!!!!</title><body><div><p style="font-size: 12px" data-id="10000">Hola!!!! <a href="real_madrid.htm">Real Madrid</a>!!!!!!!!!!!!!!<img src="real_madrid.jpg" /></p></div></body>', {tidyAttrs: true}, function (err, art) {
+        should.not.exist(err)
+        expect(art).to.be.an('object')
+        art.content.should.not.contain('style="font-size: 12px"')
+        art.content.should.not.contain('data-id="10000"')
+        art.content.should.contain('Real Madrid')
+        art.content.should.contain(' href="real_madrid.htm"')
+        art.content.should.contain(' src="real_madrid.jpg"')
+        done()
+      })
+    })
+  })
+})
