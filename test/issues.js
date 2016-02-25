@@ -36,7 +36,12 @@ describe('Issues on Github', function () {
     it('should handle pages with images as article', function (done) {
       read({
         uri: 'http://mp.weixin.qq.com/s?__biz=MjYyMzc1Mjk4MA==&mid=400815255&idx=1&sn=d91b630394b8ba70209406bbf44b41e8&scene=0#wechat_redirect',
-        // by pass the img regexp check.
+        // the class of #js_content.rich_media_content (`media`)
+        // matches the `negative` regexp of read-art reader
+        // simply avoid being removed by defining the CSS selectors
+        selectors: {
+          content: '#js_content'
+        },
         imgFallback: function (node) {
           return node.data('src') + '.jpg'
         },
@@ -46,7 +51,8 @@ describe('Issues on Github', function () {
         var content = art.content
         // somewhat weak validation
         expect(content).to.contain('data-ratio')
-        expect(content).to.contain('data-src')
+        expect(content).to.contain('')
+        expect(content).to.match(/src=\".*\.jpg"/)
         done()
       })
     })
