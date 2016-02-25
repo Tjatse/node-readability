@@ -1,9 +1,8 @@
 'use strict'
 
 var req = require('req-fast')
-var cheerio = require('cheerio')
 var util = require('util')
-var debug = require('debug')
+var debug = require('debug')('read-art.main')
 var Article = require('./lib/article')
 
 module.exports = read
@@ -65,13 +64,21 @@ function read (uri, options, callback) {
   }
   // fetch body or straight convert to article.
   if (options.uri && !options.html) {
+    debug('   requesting URL')
     req(options, function (err, resp) {
+      debug('   ∟ got response')
       if (err || !resp) {
+        if (debug.enabled) {
+          debug('     ∟ Error: ' + (err ? err.message : 'no response'))
+        }
         return callback(err || new Error('Response is empty.'))
       }
       if (!resp.body) {
-        return callback(new Error('No body was found, status code: ' + resp.statusCode))
+        var errMsg = 'No body was found, status code: ' + resp.statusCode
+        debug('     ∟ Warning: ' + errMsg)
+        return callback(new Error(errMsg))
       }
+      debug('     ∟ succeed')
 
       parsingData.html = resp.body.toString()
       delete resp.body
@@ -95,7 +102,9 @@ read.use = Article.use
  * @return {String}
  */
 function parse (o, e) {
+  debug('   analyzing HTML')
   if (!o.html) {
+    debug('   ∟ HTML content could not be found, simply returned')
     return ''
   }
   if (o.options.killBreaks) {
@@ -105,11 +114,5 @@ function parse (o, e) {
     o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ')
   }
 
-  var co = { decodeEntities: false };
-  ['normalizeWhitespace', 'xmlMode', 'lowerCaseTags'].forEach(function (n) {
-    co[n] = !!o.options[n]
-  })
-
-  var $ = cheerio.load(o.html, co)
-  o.callback(null, new Article($, o.options), o.options, e)
+  o.callback(null, new Article(o), o.options, e)
 }

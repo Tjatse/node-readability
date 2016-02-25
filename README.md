@@ -13,6 +13,7 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 - [Performance](#perfs)
 - [Installation](#ins)
 - [Usage](#usage)
+- [Debug](#debug)
 - [Score Rule](#score_rule)
 - [Extract Selectors](#selectors)
 - [Image Fallback](#imgfallback)
@@ -66,7 +67,7 @@ It supports the definitions such as:
     - **minParagraphs** A number indicates whether or not take the top candidate as a article candidate, `3` by default, i.e.: If `topCandidate` dom has more than `3` `<p>` children, `topCandidate` will be considered as the article dom, otherwise, it will be the parent of `topCandidate` (not `<body>`).
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
     - **forceDecode** A value indicates whether or not decode the full text/html by (https://github.com/fb55/entities)[entities], `false` by default.
-    - **dom** Will return the whole cheerio dom when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function.
+    - **dom** Will return the whole cheerio dom (proceeded) when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function (uses the `$_` to get the original).
     - **damping** The damping to calculate score of parent node, `1/2` by default. e.g.: the score of current document node is `20`, the score of parent will be `20 * damping`.
     - **scoreRule** Customize the score rules of each node, one arguments will be passed into the callback function, [read more](#score_rule).
     - **selectors** Customize the data extract [selectors](#selectors).
@@ -119,6 +120,23 @@ read({
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
 **With High Availability: [spider2](https://github.com/Tjatse/spider2)**
+
+<a name="debug" />
+## Debug
+See the [debug](https://github.com/visionmedia/debug) module.
+
+### Wildcards
+```
+read-art.main
+read-art.article
+read-art.doctype
+read-art.reader
+```
+
+### Example
+```bash
+$ DEBUG=read-art.* node app.js
+```
 
 <a name="better_title" />
 ## Better Title

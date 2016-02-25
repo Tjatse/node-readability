@@ -58,7 +58,6 @@ describe('find exact title', function () {
         betterTitle: 1000
       }, function (err, art) {
         should.not.exist(err)
-        console.log(art.title)
         art.title.should.contain('GitHub')
         done()
       })
@@ -72,7 +71,6 @@ describe('find exact title', function () {
         }
       }, function (err, art) {
         should.not.exist(err)
-        console.log(art.title)
         art.title.should.contain('[Github]')
         art.title.should.contain('readability')
         done()

@@ -1,11 +1,20 @@
 var read = require('../')
 
-read('http://www.cqn.com.cn/auto/news/73572.html', {
+read('http://news.163.com/16/0224/23/BGKI6D0M00014PRF.html', {
   timeout: 15000,
   output: {
-    type: 'json',
+    type: 'text',
     stripSpaces: true,
     break: true
+  },
+  selectors: {
+    quote: {
+      selector: '#ne_article_source',
+      extract: {
+        link: 'href',
+        label: 'text'
+      }
+    }
   },
   minTextLength: 0,
   scoreRule: function (node) {
@@ -24,6 +33,10 @@ read('http://www.cqn.com.cn/auto/news/73572.html', {
     return
   }
 
-  console.log('[INFO]', 'title:', art.title)
-  console.log('[INFO]', 'content:', art.content)
+  /* eslint-disable no-unused-vars */
+  var title = art.title
+  var content = art.content
+  var quote = art.quote
+  /* eslint-enable no-unused-vars */
+  console.log(quote)
 })
