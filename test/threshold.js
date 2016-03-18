@@ -5,10 +5,12 @@ var should = chai.should()
 
 describe('threshold', function () {
   var html = '<title>read-art</title><body><div><foo>bar</foo>hi, dude, i am <blockquote>readability</blockquote>, aka read-art...</div></body>'
+  var html2 = '<title>read-art</title><body><div>hi, dude, i am <blockquote>readability</blockquote>, <p>aka <a href="/path/to">read-art</a></p>...</div></body>'
+
   describe('threshold score', function () {
     describe('wrong type', function () {
-      var cases = {'string': 'abc', 'function': function () {}, 'boolean': true, 'array': []}
-      for (var c in cases) {
+      var cases = { 'string': 'abc', 'function': function () {}, 'boolean': true, 'array': [] }
+      Object.keys(cases).forEach(function (c) {
         it(c, function (done) {
           read({
             html: html,
@@ -23,7 +25,7 @@ describe('threshold', function () {
             done()
           })
         })
-      }
+      })
     })
 
     describe('number', function () {
@@ -141,17 +143,15 @@ describe('threshold', function () {
   })
 
   describe('threshold link density', function () {
-    before(function () {
-      html = '<title>read-art</title><body><div>hi, dude, i am <blockquote>readability</blockquote>, <p>aka <a href="/path/to">read-art</a></p>...</div></body>'
-    })
     describe('wrong type', function () {
       describe('fallback to 0.25 by default', function () {
-        var cases = {'string': 'abc', 'function': function () {}, 'boolean': true, 'array': []}
-        for (var c in cases) {
+        var cases = { 'string': 'abc', 'function': function () {}, 'boolean': true, 'array': [] }
+        Object.keys(cases).forEach(function (c) {
           it(c, function (done) {
             read({
-              html: html,
+              html: html2,
               thresholdLinkDensity: cases[c],
+              output: 'text',
               minTextLength: 0
             }, function (err, art) {
               should.not.exist(err)
@@ -162,14 +162,15 @@ describe('threshold', function () {
               done()
             })
           })
-        }
+        })
       })
     })
 
     describe('number', function () {
       it('greater than 1', function (done) {
         read({
-          html: html,
+          html: html2,
+          output: 'text',
           thresholdLinkDensity: 1.5,
           minTextLength: 0
         }, function (err, art) {
@@ -183,7 +184,8 @@ describe('threshold', function () {
       })
       it('less than 0', function (done) {
         read({
-          html: html,
+          html: html2,
+          output: 'text',
           thresholdLinkDensity: 1.5,
           minTextLength: 0
         }, function (err, art) {
@@ -197,7 +199,8 @@ describe('threshold', function () {
       })
       it('strict mode: threshold such as 0.01', function (done) {
         read({
-          html: html,
+          html: html2,
+          output: 'text',
           thresholdLinkDensity: 0.01,
           minTextLength: 0
         }, function (err, art) {
@@ -211,7 +214,8 @@ describe('threshold', function () {
       })
       it('non strict mode: threshold such as 0.99', function (done) {
         read({
-          html: html,
+          html: html2,
+          output: 'text',
           thresholdLinkDensity: 0.99,
           minTextLength: 0
         }, function (err, art) {
