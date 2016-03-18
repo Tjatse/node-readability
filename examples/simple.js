@@ -38,5 +38,7 @@ read('http://news.163.com/16/0224/23/BGKI6D0M00014PRF.html', {
   var content = art.content
   var quote = art.quote
   /* eslint-enable no-unused-vars */
+  console.log(title)
+  console.log(content)
   console.log(quote)
 })
