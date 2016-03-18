@@ -40,12 +40,16 @@ function read (uri, options, callback) {
   }, options)
 
   var density = options.thresholdLinkDensity
-  if (!isFinite(density) || (density > 1 || density < 0)) {
+  // fixed boolean
+  if (!isNaN(density)) {
+    density = parseFloat(density)
+  }
+  if (isNaN(density) || (density > 1 || density < 0)) {
     density = 0.25
   }
   options.thresholdLinkDensity = density
 
-  if (!isFinite(options.minParagraphs)) {
+  if (isNaN(options.minParagraphs)) {
     options.minParagraphs = 3
   }
 
