@@ -197,7 +197,10 @@ read({
       selector: '.article>small.author',
       extract: {
         shot_name: 'text',
-        full_name: 'data-author'
+        full_name: 'data-author',
+        custom_name: function(node, options) {
+          return options.source + ':' + node.text
+        }
       }
     }
   },
@@ -210,7 +213,18 @@ read({
 
 Properties:
 - **selector** the query selector, e.g.: `#article>.title`, `.articles:nth-child(3)`
-- **extract** the data that you wanna extract, could be `String`, `Array` or `Object`.
+- **extract** the data that you wanna extract, could be one of following: 
+  
+  - `Array`: each item should be a prop name, e.g.: 
+
+      `text` => `node.text()`
+      `href` => `node.attr('href')`
+      `data-src` => `node.attr('src')`
+
+  - `Object`: key-value pairs, the key is a field name, and the value could be:
+
+      `propName`: property name of `node`
+      `Function`: callback funtion with two aguments passing in - `node` and `options`.
 
 **Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
 
