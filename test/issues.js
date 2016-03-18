@@ -56,5 +56,15 @@ describe('Issues on Github', function () {
         done()
       })
     })
+
+    it('should handle zhangzhishi.cc', function (done) {
+      var URL = 'http://www.zhangzishi.cc/e3-80-90-e6-b6-a8-e5-a7-bf-e5-8a-bf-e7-a7-91-e6-99-ae-e7-b3-bb-e5-88-97-e3-80-91-e5-88-b0-e5-ba-95-e5-a6-82-e4-bd-95-e7-bb-99-e5-a5-b3-e4-ba-ba-e5-8f-a3-e4-ba-a4-ef-bc-8c-e7-b2-be.html'
+      read(URL, function (err, art) {
+        should.not.exist(err)
+        var content = art.content
+        expect(content).to.not.contain('相关推荐')
+        done()
+      })
+    })
   })
 })
