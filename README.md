@@ -202,7 +202,13 @@ read({
           return options.source + ':' + node.text
         }
       }
+    },
+    source: {
+    selector: '.article>.pub_source',
+    extract: function(node, options) {
+      return options.domain + ':' + node.text()
     }
+  }
   },
 }, function (err, art) {
   // art.title === {text: 'Who Am I', title: '--read-art--'}

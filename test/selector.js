@@ -24,6 +24,12 @@ describe('custom selectors', function () {
             },
             noreturn_name: function () {}
           }
+        },
+        source: {
+          selector: '.article>h3',
+          extract: function (node, options) {
+            return '[' + node.attr('title') + ']' + node.text()
+          }
         }
       }
     }, function (err, art) {
@@ -37,6 +43,7 @@ describe('custom selectors', function () {
       art.author.shot_name.should.equal('Tjatse')
       art.author.full_name.should.equal('Tjatse X')
       art.author.custom_name.should.equal('read-art:Tjatse X')
+      art.source.should.equal('[--read-art--]Who Am I')
       should.not.exist(art.author.noreturn_name)
       done()
     })
