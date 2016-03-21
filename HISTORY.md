@@ -1,3 +1,9 @@
+# 2016/03/21
+- improve performance
+- fixed typo @entertainyou
+- `debug` mode
+- `extract` of `selectors` could be `function` now
+
 # 2016/02/22
 - `betterTitle` option
 - #18 #20 #21 #27 #28

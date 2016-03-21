@@ -1,6 +1,6 @@
 {
   "name": "read-art",
-  "version": "0.4.8-alpha",
+  "version": "0.4.8-beta",
   "description": "Scrape/Crawl article from any site automatically. Make any web page readable, no matter Chinese or English.",
   "main": "index.js",
   "scripts": {
