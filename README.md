@@ -195,6 +195,7 @@ read({
     content: '.article p.section1',
     author: {
       selector: '.article>small.author',
+      skipTags: 'a,span',
       extract: {
         shot_name: 'text',
         full_name: 'data-author',
@@ -204,11 +205,12 @@ read({
       }
     },
     source: {
-    selector: '.article>.pub_source',
-    extract: function(node, options) {
-      return options.domain + ':' + node.text()
+      selector: '.article>.pub_source',
+      skipTags: false,
+      extract: function(node, options) {
+        return options.domain + ':' + node.text()
+      }
     }
-  }
   },
 }, function (err, art) {
   // art.title === {text: 'Who Am I', title: '--read-art--'}
@@ -231,6 +233,11 @@ Properties:
 
       `propName`: property name of `node`
       `Function`: callback funtion with two aguments passing in - `node` and `options`.
+
+- **skipTags** a value indicating whether or not skip the tags (remove)
+
+  - `Boolean` skip nothing if this property is set to `false`
+  - `String` skip the specific tags (supports CSS3 selectors)
 
 **Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
 

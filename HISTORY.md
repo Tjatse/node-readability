@@ -1,3 +1,6 @@
+# 2016/03/23
+- improve `selectors` option
+
 # 2016/03/21
 - improve performance
 - fixed typo @entertainyou
