@@ -1,27 +1,14 @@
 var read = require('../')
 
-read('http://news.163.com/16/0224/23/BGKI6D0M00014PRF.html', {
+var uri = 'http://www.cq.xinhuanet.com/2016-03/28/c_1118467794.htm'
+// 'http://media.china.com.cn/gdxw/2016-03-16/665392.html'
+// 'http://www.cq.xinhuanet.com/2016-03/28/c_1118465265.htm'
+read(uri, {
   timeout: 15000,
   output: {
     type: 'text',
     stripSpaces: true,
     break: true
-  },
-  selectors: {
-    quote: {
-      selector: '#ne_article_source',
-      extract: {
-        link: 'href',
-        label: 'text'
-      }
-    }
-  },
-  minTextLength: 0,
-  scoreRule: function (node) {
-    if (node.hasClass('w740')) {
-      return 100
-    }
-    return 0
   }
 }, function (err, art, options, resp) {
   if (err) {

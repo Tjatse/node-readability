@@ -1,3 +1,11 @@
+# 2016/04/07
+- remove useless anchors i.e.: paginations, contactors...
+- remove related links if neccessary
+- improve link density algorithm
+- options recognition
+- cheerio object can be passed in
+- more test cases
+
 # 2016/03/23
 - improve `selectors` option
 

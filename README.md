@@ -54,11 +54,11 @@ npm install read-art --production
 <a name="usage" />
 ## Usage
 ```javascript
-read(html/uri [, options], callback)
+read(<html|uri|cheerio> [, options], [callback])
 ```
 
 It supports the definitions such as:
-  * **html/uri** Html or Uri string.
+  * **html|uri|cheerio** Html, Uri string or Cheerio instance.
   * **options** An optional options object, including:
     - **output** The data type of article content, head over to [Output](#output) to get more information.
     - **killBreaks** A value indicating whether or not kill breaks, blanks, tab symbols(\r\t\n) into one `<br />`, `true` by default.
@@ -66,6 +66,7 @@ It supports the definitions such as:
     - **minTextLength** If the content is less than `[minTextLength]` characters, don't even count it, `25` by default.
     - **minParagraphs** A number indicates whether or not take the top candidate as a article candidate, `3` by default, i.e.: If `topCandidate` dom has more than `3` `<p>` children, `topCandidate` will be considered as the article dom, otherwise, it will be the parent of `topCandidate` (not `<body>`).
     - **tidyAttrs** Remove all the attributes on elements, `false` by default.
+    - **keepAllLinks** A value indicates whether or not keep all the links, especially the useless anchors such as pagination, print, email and so on, `false` by default.
     - **forceDecode** A value indicates whether or not decode the full text/html by (https://github.com/fb55/entities)[entities], `false` by default.
     - **dom** Will return the whole cheerio dom (proceeded) when this property is set to `true`, `false` by default, try to use `art.dom` to get the dom object in callback function (uses the `$_` to get the original).
     - **damping** The damping to calculate score of parent node, `1/2` by default. e.g.: the score of current document node is `20`, the score of parent will be `20 * damping`.
@@ -90,20 +91,20 @@ It supports the definitions such as:
 var read = require('read-art');
 // read from google:
 read('http://google.com', function(err, art, options, resp){
-    if(err){
-      throw err;
-    }
-    var title = art.title,      // title of article
-        content = art.content,  // content of article
-        html = art.html;        // whole original innerHTML
+  if(err){
+    throw err;
+  }
+  var title = art.title,      // title of article
+      content = art.content,  // content of article
+      html = art.html;        // whole original innerHTML
 
-    console.log('[STATUS CODE]', resp && resp.statusCode);
+  console.log('[STATUS CODE]', resp && resp.statusCode);
 });
 // or:
 read({
-    uri: 'http://google.com',
-    charset: 'utf8'
-  }, function(err, art, options, resp){
+  uri: 'http://google.com',
+  charset: 'utf8'
+}, function(err, art, options, resp){
 
 });
 // what about html?
@@ -111,9 +112,15 @@ read('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>', f
 
 });
 // of course could be
+var $ = cheerio.load('<title>node-art</title><body><div><p>hello, read-art!</p></div></body>')
 read({
-    uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>'
-  }, function(err, art, options, resp){
+  cheerio: $
+}, function(err, art, options, resp){
+
+});
+read({
+  uri: '<title>node-art</title><body><div><p>hello, read-art!</p></div></body>'
+}, function(err, art, options, resp){
 
 });
 ```
@@ -350,6 +357,12 @@ The `[usage]` could be one of following:
   If `negative` regexp test `id` + `className` of node success, it will not be took as a candidate. `[re]` is a regexp, e.g. `/dv101|dv102/` will match the element likes `<div class="dv101">...` or `<div id="dv102">...`, if `[override]` is set to `true`, `negative` will be `/dv101|dv102/i`, otherwise it will be appended to the origin, i.e. :
   ```
   /com(?:bx|ment|-)|contact|comment|captcha|foot(?:er|note)?|link|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|util|shopping|tags|tool|widget|tip|dialog|copyright|bottom|dv101|dv102/i
+  ```
+
+- `this.regexps.uselessAnchors([re], [override])`
+  If `uselessAnchors` regexp test `text content` of adjacent sibling anchors(`a+a+a`) success, and the `keepAllLinks` is set to `false`, the parent node of anchor will be removed - normally it could be the pagination, print/email nodes. `[re]` is a regexp, e.g. `/next\spage|previous\spage/i` will match the element likes `<a href="2.htm">Next Page</a>` or `<a href="1.htm">Previous Page</a>`, if `[override]` is set to `true`, `uselessAnchors` will be `/next\spage|previous\spage/i`, otherwise it will be appended to the origin, i.e. :
+  ```
+  /(\d+|next|prev|first|last|print|comment|mail|font|about|contact|(下|下|前|后)一|(首|尾)页)|打印|评论|邮件|信箱|转发|关于|联系|^(大|中|小)$|next\spage|previous\spage/i
   ```
 
 - `this.regexps.unlikely([re], [override])`
