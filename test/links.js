@@ -38,7 +38,6 @@ describe('fix links', function () {
       }, function (err, art) {
         should.not.exist(err)
         expect(art).to.be.an('object')
-        console.log('ART', art.content)
         art.content.should.contain('<a href="http://github.com/Tjatse/read-art.git">')
         art.title.should.equal('read-art')
         done()
