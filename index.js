@@ -1,6 +1,7 @@
 'use strict'
 
 var req = require('req-fast')
+var cheerio = require('cheerio')
 var util = require('util')
 var debug = require('debug')('read-art.main')
 var Article = require('./lib/article')
@@ -15,18 +16,40 @@ module.exports = read
  * 1: error
  * 2: article
  */
-function read (uri, options, callback) {
+function read () {
+  return handle.apply(null, arguments) // eslint-disable-line no-useless-call
+}
+
+/**
+ * Custom settings.
+ * @type {readArt.use}
+ */
+read.use = Article.use
+
+function handle (uri, options, callback) {
+  if (arguments.length === 0) {
+    return new Error('Incorrect arguments.')
+  }
   // organize parameters
   if ((typeof options === 'function') && !callback) {
     callback = options
   }
   if (options && typeof options === 'object') {
     options.uri = uri
-  } else if (typeof uri === 'string') {
+  } else if (typeof uri === 'string' || isCheerio(uri)) {
     options = { uri: uri }
   } else {
     options = uri
-    uri = options.uri || options.html
+  }
+
+  if (typeof options !== 'object') {
+    return new Error('options are required!')
+  }
+
+  uri = options.cheerio || options.html || options.uri
+
+  if ((typeof uri !== 'string' && !isCheerio(uri)) || !uri) {
+    return new Error('only accept cheerio, url or HTML as article content.')
   }
 
   options = util._extend({
@@ -52,12 +75,37 @@ function read (uri, options, callback) {
   if (isNaN(options.minParagraphs)) {
     options.minParagraphs = 3
   }
-
+  if (typeof callback !== 'function') {
+    callback = false
+  }
+  // indicating whether uri is a cheerio object or not.
+  if (typeof uri !== 'string') {
+    if (isCheerio(uri)) {
+      if (!isHtml(options.html)) {
+        delete options.html
+      }
+      if (isHtml(options.uri)) {
+        if (!options.html) {
+          options.html = options.uri
+        }
+        delete options.uri
+      }
+      options.cheerio = uri
+      return parse({
+        cheerio: uri,
+        options: options,
+        callback: callback
+      })
+    }
+    var err = new Error('only accept cheerio, url or HTML as article content.')
+    return callback ? callback(err) : err
+  }
   // indicating uri is html or url.
-  var isHTML = uri.match(/^\s*</)
-  if (isHTML && options.uri && !options.html) {
-    options.html = options.uri
-    delete options.uri
+  if (isHtml(uri) && options.uri && !options.html) {
+    options.html = uri
+    if (isHtml(options.uri)) {
+      delete options.uri
+    }
   }
 
   var parsingData = {
@@ -75,12 +123,12 @@ function read (uri, options, callback) {
         if (debug.enabled) {
           debug('     ∟ Error: ' + (err ? err.message : 'no response'))
         }
-        return callback(err || new Error('Response is empty.'))
+        return callback && callback(err || new Error('Response is empty.'))
       }
       if (!resp.body) {
         var errMsg = 'No body was found, status code: ' + resp.statusCode
         debug('     ∟ Warning: ' + errMsg)
-        return callback(new Error(errMsg))
+        return callback && callback(new Error(errMsg))
       }
       debug('     ∟ succeed')
 
@@ -94,29 +142,54 @@ function read (uri, options, callback) {
 }
 
 /**
- * Custom settings.
- * @type {readArt.use}
- */
-read.use = Article.use
-
-/**
  * Parse html to cheerio dom.
  * @param o options
  * @param e extra data
  * @return {String}
  */
 function parse (o, e) {
-  debug('   analyzing HTML')
-  if (!o.html) {
-    debug('   ∟ HTML content could not be found, simply returned')
-    return ''
+  debug('   parsing...')
+  if (!o.html && !o.cheerio) {
+    var errMsg = 'Article content could not be found.'
+    debug('   ∟ ' + errMsg)
+    return o.callback && o.callback(new Error(errMsg))
   }
-  if (o.options.killBreaks) {
+  if (o.html && o.options.killBreaks) {
     // replace <br />(blanks goes here) to <br />.
     o.html = o.html.replace(/<br[^\/>]*\/?>/ig, '<br />')
     // remove tab symbols like \r\t\n
     o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ')
   }
 
-  o.callback(null, new Article(o), o.options, e)
+  o.callback && o.callback(null, new Article(o), o.options, e)
+}
+
+// from cheerio module.
+var quickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/
+/**
+ * Check if string is HTML
+ * @param  {String}  str
+ * @return {Boolean}
+ */
+function isHtml (str) {
+  if (typeof str !== 'string') {
+    return false
+  }
+  // Faster than running regex, if str starts with `<` and ends with `>`, assume it's HTML
+  if (str.charAt(0) === '<' && str.charAt(str.length - 1) === '>' && str.length >= 3) {
+    return true
+  }
+
+  // Run the regex
+  var match = quickExpr.exec(str)
+  return !!(match && match.length > 1)
+}
+
+/**
+ * Check if object is an instance of Cheerio
+ * @param  {Object}  o
+ * @return {Boolean}
+ */
+function isCheerio (o) {
+  return o && typeof o.root === 'function' && o.root() instanceof cheerio
 }
