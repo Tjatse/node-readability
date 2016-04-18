@@ -1,7 +1,7 @@
 var read = require('../')
 var Cheerio = require('cheerio')
 var chai = require('chai')
-var expect = chai.expect // eslint-disable-line
+var expect = chai.expect
 var should = chai.should()
 
 describe('different options', function () {
@@ -148,48 +148,49 @@ describe('different options', function () {
       })
     })
   })
-
-  describe('arguments: [WrongType]', function () {
-    describe('[Null]', function () {
-      it('should returns error', function (done) {
-        var err = read()
-        should.exist(err)
-        expect(err).to.be.a('error')
-        done()
+  if (typeof Promise === 'undefined') {
+    describe('arguments: [WrongType]', function () {
+      describe('[Null]', function () {
+        it('should returns error', function (done) {
+          var err = read()
+          should.exist(err)
+          expect(err).to.be.a('error')
+          done()
+        })
+      })
+      describe('[Function]', function () {
+        it('should returns error', function (done) {
+          var err = read(function () {})
+          should.exist(err)
+          expect(err).to.be.a('error')
+          done()
+        })
+      })
+      describe('[Wrong]', function () {
+        it('should returns error', function (done) {
+          var err = read({})
+          should.exist(err)
+          expect(err).to.be.a('error')
+          done()
+        })
+      })
+      describe('[Wrong], [Wrong]', function () {
+        it('should returns error', function (done) {
+          var err = read('', {})
+          should.exist(err)
+          expect(err).to.be.a('error')
+          done()
+        })
+      })
+      describe('[String], [Object], [Wrong]', function () {
+        it('should auto handle error without exiting', function (done) {
+          var err = read(passing.html, {charset: charset}, {})
+          should.not.exist(err)
+          done()
+        })
       })
     })
-    describe('[Function]', function () {
-      it('should returns error', function (done) {
-        var err = read(function () {})
-        should.exist(err)
-        expect(err).to.be.a('error')
-        done()
-      })
-    })
-    describe('[Wrong]', function () {
-      it('should returns error', function (done) {
-        var err = read({})
-        should.exist(err)
-        expect(err).to.be.a('error')
-        done()
-      })
-    })
-    describe('[Wrong], [Wrong]', function () {
-      it('should returns error', function (done) {
-        var err = read('', {})
-        should.exist(err)
-        expect(err).to.be.a('error')
-        done()
-      })
-    })
-    describe('[String], [Object], [Wrong]', function () {
-      it('should auto handle error without exiting', function (done) {
-        var err = read(passing.html, {charset: charset}, {})
-        should.not.exist(err)
-        done()
-      })
-    })
-  })
+  }
 })
 
 describe('minParagraphs option', function () {

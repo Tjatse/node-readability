@@ -17,7 +17,21 @@ module.exports = read
  * 2: article
  */
 function read () {
-  return handle.apply(null, arguments) // eslint-disable-line no-useless-call
+  var args = arguments
+  if ((args.length === 0 || typeof args[args.length - 1] !== 'function') && typeof Promise !== 'undefined') {
+    debug('Promise')
+    return new Promise(function (resolve, reject) {
+      handle.apply({
+        _promise: true,
+        resolve: resolve,
+        reject: reject
+      }, args)
+    })
+  }
+  debug('Normally handle')
+  return handle.apply({
+    _promise: false
+  }, args)
 }
 
 /**
@@ -27,8 +41,14 @@ function read () {
 read.use = Article.use
 
 function handle (uri, options, callback) {
+  var resolve
+  var reject
+  if (this._promise) {
+    resolve = this.resolve
+    reject = this.reject
+  }
   if (arguments.length === 0) {
-    return new Error('Incorrect arguments.')
+    return catchError('Incorrect arguments.', reject)
   }
   // organize parameters
   if ((typeof options === 'function') && !callback) {
@@ -43,13 +63,13 @@ function handle (uri, options, callback) {
   }
 
   if (typeof options !== 'object') {
-    return new Error('options are required!')
+    return catchError('options are required!', reject)
   }
 
   uri = options.cheerio || options.html || options.uri
 
   if ((typeof uri !== 'string' && !isCheerio(uri)) || !uri) {
-    return new Error('only accept cheerio, url or HTML as article content.')
+    return catchError('only accept cheerio, url or HTML as article content.', reject)
   }
 
   options = util._extend({
@@ -75,9 +95,13 @@ function handle (uri, options, callback) {
   if (isNaN(options.minParagraphs)) {
     options.minParagraphs = 3
   }
-  if (typeof callback !== 'function') {
-    callback = false
+
+  if (typeof callback === 'function') {
+    callback._not_promise = true
+    reject = callback
+    resolve = callback
   }
+
   // indicating whether uri is a cheerio object or not.
   if (typeof uri !== 'string') {
     if (isCheerio(uri)) {
@@ -93,12 +117,10 @@ function handle (uri, options, callback) {
       options.cheerio = uri
       return parse({
         cheerio: uri,
-        options: options,
-        callback: callback
-      })
+        options: options
+      }, null, resolve, reject)
     }
-    var err = new Error('only accept cheerio, url or HTML as article content.')
-    return callback ? callback(err) : err
+    return catchError('only accept cheerio, url or HTML as article content.', reject)
   }
   // indicating uri is html or url.
   if (isHtml(uri) && options.uri && !options.html) {
@@ -111,57 +133,67 @@ function handle (uri, options, callback) {
   var parsingData = {
     uri: options.uri,
     html: options.html,
-    options: options,
-    callback: callback
+    options: options
   }
   // fetch body or straight convert to article.
   if (options.uri && !options.html) {
     debug('   requesting URL')
-    req(options, function (err, resp) {
+    return req(options, function (err, resp) {
       debug('   ∟ got response')
       if (err || !resp) {
         if (debug.enabled) {
           debug('     ∟ Error: ' + (err ? err.message : 'no response'))
         }
-        return callback && callback(err || new Error('Response is empty.'))
+        return catchError(err || 'Response is empty.', reject)
       }
       if (!resp.body) {
         var errMsg = 'No body was found, status code: ' + resp.statusCode
         debug('     ∟ Warning: ' + errMsg)
-        return callback && callback(new Error(errMsg))
+        return catchError(errMsg, reject)
       }
       debug('     ∟ succeed')
 
       parsingData.html = resp.body.toString()
       delete resp.body
-      parse(parsingData, resp)
+      parse(parsingData, resp, resolve, reject)
     })
-  } else {
-    parse(parsingData)
   }
+  parse(parsingData, null, resolve, reject)
 }
 
 /**
  * Parse html to cheerio dom.
- * @param o options
- * @param e extra data
- * @return {String}
+ * @param  {Object} data
+ * @param  {Object} resp
+ * @param  {Function} resolve
+ * @param  {Function} reject
+ * @return {[Mixed]}
  */
-function parse (o, e) {
+function parse (data, resp, resolve, reject) {
   debug('   parsing...')
-  if (!o.html && !o.cheerio) {
+  if (!data.html && !data.cheerio) {
     var errMsg = 'Article content could not be found.'
     debug('   ∟ ' + errMsg)
-    return o.callback && o.callback(new Error(errMsg))
+    return catchError(errMsg, reject)
   }
-  if (o.html && o.options.killBreaks) {
+  if (data.html && data.options.killBreaks) {
     // replace <br />(blanks goes here) to <br />.
-    o.html = o.html.replace(/<br[^\/>]*\/?>/ig, '<br />')
+    data.html = data.html.replace(/<br[^\/>]*\/?>/ig, '<br />')
     // remove tab symbols like \r\t\n
-    o.html = o.html.replace(/[\n\r\t]{2,}/gi, ' ')
+    data.html = data.html.replace(/[\n\r\t]{2,}/gi, ' ')
   }
-
-  o.callback && o.callback(null, new Article(o), o.options, e)
+  if (resolve) {
+    var opts = data.options
+    var art = new Article(data)
+    if (!resolve._not_promise) {
+      if (resp) {
+        art.serverResponse = resp
+      }
+      resolve(art)
+    } else {
+      resolve(null, art, opts, resp)
+    }
+  }
 }
 
 // from cheerio module.
@@ -192,4 +224,17 @@ function isHtml (str) {
  */
 function isCheerio (o) {
   return o && typeof o.root === 'function' && o.root() instanceof cheerio
+}
+
+/**
+ * Handle error
+ * @param  {String|Error} err
+ * @param  {Function} reject
+ * @return {[Mixed]}
+ */
+function catchError (err, reject) {
+  if (!(err instanceof Error)) {
+    err = new Error(String(err))
+  }
+  return reject ? reject(err) : err
 }
