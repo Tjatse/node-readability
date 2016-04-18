@@ -1,3 +1,6 @@
+# 2016/04/18
+- Promise support
+
 # 2016/04/07
 - remove useless anchors i.e.: paginations, contactors...
 - remove related links if neccessary

@@ -1,6 +1,6 @@
 {
   "name": "read-art",
-  "version": "0.4.9-alpha",
+  "version": "0.4.9-beta",
   "description": "Scrape/Crawl article from any site automatically. Make any web page readable, no matter Chinese or English.",
   "main": "index.js",
   "scripts": {
@@ -38,6 +38,7 @@
   "devDependencies": {
     "mocha": "2.4.5",
     "chai": "3.5.0",
+    "chai-as-promised": "5.3.0",
     "standard": "~6.0.7"
   },
   "standard": {

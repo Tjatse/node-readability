@@ -123,6 +123,18 @@ read({
 }, function(err, art, options, resp){
 
 });
+/*
+  Promise
+ */
+read('<body><p>Hello, read-art</p></body>')
+  .then(function (art, options, httpResponse) {
+    // TODO:
+  }, function (err) {
+    // Handle error.
+    })
+  .catch(function (err) {
+    // Catch exception.
+  })
 ```
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
 
