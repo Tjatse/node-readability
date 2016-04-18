@@ -4,7 +4,7 @@ var expect = chai.expect
 var should = chai.should()
 
 describe('Issues on Github', function () {
-  describe('@mxr576', function () {
+  describe.skip('@mxr576', function () {
     it('1. should have title & content', function (done) {
       read({
         uri: 'http://rss.feedsportal.com/c/33832/f/610117/p/1/s/64865903/sc/3/l/0L0Slongfordleader0Bie0Clife0Etimes0Eclassic0Eirish0Edesign0Ereimagined0Ein0Estyle0E10E6965490A/story01.htm',
