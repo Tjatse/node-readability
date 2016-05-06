@@ -52,7 +52,7 @@ describe('Issues on Github', function () {
         // somewhat weak validation
         expect(content).to.contain('data-ratio')
         expect(content).to.contain('')
-        expect(content).to.match(/src=\".*\.jpg"/)
+        expect(content).to.match(/src=".*\.jpg"/)
         done()
       })
     })
