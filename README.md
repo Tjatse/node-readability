@@ -40,7 +40,7 @@ In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **
 
 ![image](screenshots/performance.jpg)
 
-> Server infos: 
+> Server infos:
 > * 20M bandwidth of fibre-optical
 > * 8 Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz cpus
 > * 32G memory
@@ -124,16 +124,14 @@ read({
 
 });
 /*
-  Promise
+  Promises
  */
 read('<body><p>Hello, read-art</p></body>')
-  .then(function (art, options, httpResponse) {
-    // TODO:
-  }, function (err) {
-    // Handle error.
-    })
-  .catch(function (err) {
-    // Catch exception.
+  .then((art) => {
+    console.log(article) // -> object with all the info
+  })
+  .catch((err) => {
+    // Manage error
   })
 ```
 **CAUTION:** Title must be wrapped in a `<title>` tag and content must be wrapped in a `<body>` tag.
@@ -240,9 +238,9 @@ read({
 
 Properties:
 - **selector** the query selector, e.g.: `#article>.title`, `.articles:nth-child(3)`
-- **extract** the data that you wanna extract, could be one of following: 
-  
-  - `Array`: each item should be a prop name, e.g.: 
+- **extract** the data that you wanna extract, could be one of following:
+
+  - `Array`: each item should be a prop name, e.g.:
 
       `text` => `node.text()`
       `href` => `node.attr('href')`
@@ -258,7 +256,7 @@ Properties:
   - `Boolean` skip nothing if this property is set to `false`
   - `String` skip the specific tags (supports CSS3 selectors)
 
-**Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.  
+**Notes** The binding data will be an object or array (object per item) if the `extract` option is an array object, `title` and `content` will override the default extracting methods, and the output of `content` depends on the `output` option.
 
 <a name="imgfallback" />
 ## Image Fallback
@@ -564,5 +562,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-
