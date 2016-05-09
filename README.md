@@ -127,7 +127,7 @@ read({
   Promises
  */
 read('<body><p>Hello, read-art</p></body>')
-  .then((art) => {
+  .then((article) => {
     console.log(article) // -> object with all the info
   })
   .catch((err) => {
