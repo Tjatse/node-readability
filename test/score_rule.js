@@ -37,7 +37,7 @@ describe('extract content', function () {
       }, function (err, art) {
         should.not.exist(err)
         expect(art).to.be.an('object')
-        expect(art.content).to.match(/^Let\'s/)
+        expect(art.content).to.match(/^Let's/)
         setTimeout(done, 1000)
       })
     })
@@ -57,7 +57,7 @@ describe('extract content', function () {
       }, function (err, art) {
         should.not.exist(err)
         expect(art).to.be.an('object')
-        expect(art.content).to.match(/^I\'m currently working on pm2/)
+        expect(art.content).to.match(/^I'm currently working on pm2/)
         setTimeout(done, 1000)
       })
     })
