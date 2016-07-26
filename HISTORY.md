@@ -1,3 +1,9 @@
+# 2016/07/26
+- Update packages, add nodeJS 4 and 6 for Travis and remove unnecesary … @miduga
+- Do some refactor and cleaning @miduga
+- Merge branch 'cleaning-reader' @miduga
+- Fix promises documentation @miduga
+
 # 2016/04/18
 - Promise support
 
