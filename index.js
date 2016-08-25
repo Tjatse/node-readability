@@ -5,6 +5,7 @@ var cheerio = require('cheerio')
 var util = require('util')
 var debug = require('debug')('read-art.main')
 var Article = require('./lib/article')
+var Reader = require('./lib/reader')
 
 module.exports = read
 
@@ -39,6 +40,10 @@ function read () {
  * @type {readArt.use}
  */
 read.use = Article.use
+
+// Simply Expose Article and Reader.
+read.Article = Article
+read.Reader = Reader
 
 function handle (uri, options, callback) {
   var resolve

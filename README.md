@@ -86,6 +86,13 @@ It supports the definitions such as:
 > Head over to test or examples directory for a complete example.
 
 <a name="usage_eg" />
+### Access `Reader` and `Article`
+```javascript
+var read = require('read-art');
+// read.Reader.extractProp(...args)
+// var art = new read.Article([OBJ]);
+```
+
 ### Examples
 ```javascript
 var read = require('read-art');
