@@ -1,3 +1,6 @@
+# 2016/08/25
+- Simply expose Reader and Article.
+
 # 2016/07/26
 - Update packages, add nodeJS 4 and 6 for Travis and remove unnecesary … @miduga
 - Do some refactor and cleaning @miduga
