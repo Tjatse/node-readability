@@ -1,3 +1,7 @@
+# 2016/09/27
+- Enhance JSON output: paragraphs
+- Fixed: remove \r\t\n paragraph
+
 # 2016/08/25
 - Simply expose Reader and Article.
 
