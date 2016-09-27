@@ -63,7 +63,7 @@ describe('output', function () {
 
   describe('output is json and break it down', function () {
     it('should be an Array (length equals 2)', function (done) {
-      read('<title>read-art</title><body><div><div></div><p><span>hi, dude,</span><br style=""/><span>i am readability, aka read-art...</span></p></div></body>', {
+      read('<title>read-art</title><body><div><div></div><p><span>hi, dude,</span><br style=""/><p>i am readability, aka read-art...</p></p></div></body>', {
         output: {
           type: 'json',
           break: true
@@ -73,6 +73,21 @@ describe('output', function () {
         expect(art).to.be.an('object')
         expect(art.content).to.be.an('array')
         expect(art.content).to.be.length(2)
+        art.title.should.equal('read-art')
+        done()
+      })
+    })
+    it('should be an Array (length equals 1)', function (done) {
+      read('<title>read-art</title><body><div><div></div><p><span>hi, dude,</span><br style=""/><span>i am readability, aka read-art...</span></p></div></body>', {
+        output: {
+          type: 'json',
+          break: true
+        }
+      }, function (err, art) {
+        should.not.exist(err)
+        expect(art).to.be.an('object')
+        expect(art.content).to.be.an('array')
+        expect(art.content).to.be.length(1)
         art.title.should.equal('read-art')
         done()
       })
