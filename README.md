@@ -25,7 +25,7 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 
 ## How it works
 
-In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **700 thousands documents per day**, **22 million per month**, and the maximize crawling speed is **450 per minute**, **avg 80 per minute**, the memory cost are about **200 megabytes** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](#score_rule) or [Selectors](selectors). it's better than any other readability modules.
+In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **150k documents per day**, and the maximize crawling speed is **500 /minute**, **avg 100 /minute**, the memory cost are about **200 Mb** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](/Tjatse/node-readability/wiki/Handbook#score_rule) or [Selectors](/Tjatse/node-readability/wiki/Handbook#selectors). it's better than any other readability modules.
 > Server infos:
 > * 20M bandwidth of fibre-optical
 > * 8 Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz cpus
