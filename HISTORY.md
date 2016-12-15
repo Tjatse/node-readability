@@ -1,3 +1,6 @@
+# 2016/12/15
+- DO NOTHING BUT RELEASE 0.5.0
+
 # 2016/09/27
 - Enhance JSON output: paragraphs
 - Fixed: remove \r\t\n paragraph
