@@ -228,7 +228,10 @@ function isHtml (str) {
  * @return {Boolean}
  */
 function isCheerio (o) {
-  return o && typeof o.root === 'function' && o.root() instanceof cheerio
+  // a better way?
+  return o && ['load', 'html', 'text', 'parseHTML', 'contains', 'root'].every(function (method) {
+    return typeof o[method] === 'function'
+  })
 }
 
 /**

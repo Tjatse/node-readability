@@ -1,3 +1,6 @@
+# 2017/01/15
+- Fixed: check if the uri is a cheerio Object in an ugly way.
+
 # 2016/12/15
 - DO NOTHING BUT RELEASE 0.5.0
 
