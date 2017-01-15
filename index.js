@@ -1,7 +1,6 @@
 'use strict'
 
 var req = require('req-fast')
-var cheerio = require('cheerio')
 var util = require('util')
 var debug = require('debug')('read-art.main')
 var Article = require('./lib/article')
@@ -183,7 +182,7 @@ function parse (data, resp, resolve, reject) {
   }
   if (data.html && data.options.killBreaks) {
     // replace <br />(blanks goes here) to <br />.
-    data.html = data.html.replace(/<br[^\/>]*\/?>/ig, '<br />')
+    data.html = data.html.replace(/<br[^/>]*\/?>/ig, '<br />')
     // remove tab symbols like \r\t\n
     data.html = data.html.replace(/[\n\r\t]{2,}/gi, ' ')
   }
@@ -202,7 +201,7 @@ function parse (data, resp, resolve, reject) {
 }
 
 // from cheerio module.
-var quickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/
+var quickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w-]*)$)/
 /**
  * Check if string is HTML
  * @param  {String}  str
