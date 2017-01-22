@@ -10,22 +10,22 @@ read-art [![NPM version](https://badge.fury.io/js/read-art.svg)](http://badge.fu
 
 ## Guide
 
-- [Features](/Tjatse/node-readability/wiki/Handbook#features)
-- [Performance](/Tjatse/node-readability/wiki/Handbook#perfs)
-- [Installation](/Tjatse/node-readability/wiki/Handbook#ins)
-- [Usage](/Tjatse/node-readability/wiki/Handbook#usage)
-- [Debug](/Tjatse/node-readability/wiki/Handbook#debug)
-- [Score Rule](/Tjatse/node-readability/wiki/Handbook#score_rule)
-- [Extract Selectors](/Tjatse/node-readability/wiki/Handbook#selectors)
-- [Image Fallback](/Tjatse/node-readability/wiki/Handbook#imgfallback)
-- [Threshold](/Tjatse/node-readability/wiki/Handbook#threshold)
-- [Customize Settings](/Tjatse/node-readability/wiki/Handbook#cus_sets)
-- [Output](/Tjatse/node-readability/wiki/Handbook#output)
-- [Notes](/Tjatse/node-readability/wiki/Handbook#notes)
+- [Features](wiki/Handbook#features)
+- [Performance](wiki/Handbook#perfs)
+- [Installation](wiki/Handbook#ins)
+- [Usage](wiki/Handbook#usage)
+- [Debug](wiki/Handbook#debug)
+- [Score Rule](wiki/Handbook#score_rule)
+- [Extract Selectors](wiki/Handbook#selectors)
+- [Image Fallback](wiki/Handbook#imgfallback)
+- [Threshold](wiki/Handbook#threshold)
+- [Customize Settings](wiki/Handbook#cus_sets)
+- [Output](wiki/Handbook#output)
+- [Notes](wiki/Handbook#notes)
 
 ## How it works
 
-In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **1500k documents per day**, and the maximize crawling speed is **1.2k /minute**, **avg 1k /minute**, the memory cost are about **200 MB** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](/Tjatse/node-readability/wiki/Handbook#score_rule) or [Selectors](/Tjatse/node-readability/wiki/Handbook#selectors). it's better than any other readability modules.
+In my case, the speed of [spider](https://github.com/Tjatse/spider2) is about **1500k documents per day**, and the maximize crawling speed is **1.2k /minute**, **avg 1k /minute**, the memory cost are about **200 MB** on each spider kernel, and the accuracy is about 90%, the rest 10% can be fixed by customizing [Score Rules](wiki/Handbook#score_rule) or [Selectors](wiki/Handbook#selectors). it's better than any other readability modules.
 > (4) Server infos:
 > * 20M bandwidth of fibre-optical
 > * 8 Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz cpus
