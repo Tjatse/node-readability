@@ -1,3 +1,6 @@
+# 2017/03/27
+- Enhance related articles list analyze.
+
 # 2017/01/15
 - Fixed: check if the uri is a cheerio Object in an ugly way.
 

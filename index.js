@@ -82,6 +82,7 @@ function handle (uri, options, callback) {
     output: 'html',
     minTextLength: 25,
     thresholdLinkDensity: 0.25,
+    minRelatedDensity: 0.8,
     minParagraphs: 3,
     scoreImg: false
   }, options)
