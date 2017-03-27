@@ -13,7 +13,7 @@ describe('different options', function () {
   }
   describe('arguments: [String|Cheerio], [Object], [Function]', function () {
     Object.keys(passing).forEach(function (k) {
-      it('should detect two options - ' + k, function (done) {
+      it('auto detect - ' + k, function (done) {
         read(passing[k], {
           charset: charset
         }, function (err, art, options, resp) {
@@ -44,7 +44,7 @@ describe('different options', function () {
 
   describe('arguments: [Object], [Function]', function () {
     Object.keys(passing).forEach(function (k) {
-      it('should detect two options - ' + k, function (done) {
+      it('auto detect - ' + k, function (done) {
         read({
           uri: passing[k],
           charset: charset

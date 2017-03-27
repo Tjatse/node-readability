@@ -6,7 +6,11 @@ var should = chai.should()
 describe('threshold', function () {
   var html = '<title>read-art</title><body><div><foo>bar</foo>hi, dude, i am <blockquote>readability</blockquote>, aka read-art...</div></body>'
   var html2 = '<title>read-art</title><body><div>hi, dude, i am <blockquote>readability</blockquote>, <p>aka <a href="/path/to">read-art</a></p>...</div></body>'
-
+  before(function () {
+    read.use(function () {
+      this.reset()
+    })
+  })
   describe('threshold score', function () {
     describe('wrong type', function () {
       var cases = { 'string': 'abc', 'function': function () {}, 'boolean': true, 'array': [] }
@@ -153,7 +157,7 @@ describe('threshold', function () {
               thresholdLinkDensity: cases[c],
               output: 'text',
               minTextLength: 0
-            }, function (err, art) {
+            }, function (err, art, options) {
               should.not.exist(err)
               expect(art).to.be.an('object')
               art.title.should.equal('read-art')
