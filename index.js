@@ -181,11 +181,15 @@ function parse (data, resp, resolve, reject) {
     debug('   ∟ ' + errMsg)
     return catchError(errMsg, reject)
   }
-  if (data.html && data.options.killBreaks) {
+  var html = data.html || data.options.html
+  if (data.options.killBreaks && html) {
     // replace <br />(blanks goes here) to <br />.
-    data.html = data.html.replace(/<br[^/>]*\/?>/ig, '<br />')
-    // remove tab symbols like \r\t\n
-    data.html = data.html.replace(/[\n\r\t]{2,}/gi, ' ')
+    data.html = html.replace(/<br[^/>]*\/?>/ig, '<br />')
+                // remove tab symbols like \r\t\n
+                .replace(/[\n\r\t]{2,}/gi, ' ')
+  }
+  if (!data.html && html) {
+    data.html = html
   }
   if (resolve) {
     var opts = data.options
